@@ -14,10 +14,10 @@ export async function signOutUser() {
 //Todo fix state:{from}
 export const withAuth = (loaderFunction: LoaderFunction) => {
   const newFunction: LoaderFunction = async (args) => {
-    const user = await getCurrentUser();
-    if (!user) {
-      return redirect("/auth");
-    }
+    // const user = await getCurrentUser();
+    // if (!user) {
+    //   return redirect("/auth");
+    // }
 
     return loaderFunction(args);
   };

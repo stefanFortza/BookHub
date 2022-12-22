@@ -1,6 +1,5 @@
 export interface BookModel {
-  id?: number;
-  isbn: string;
+  id?: string;
   title: string;
   author: string;
   yearOfPublication: string;
@@ -8,8 +7,8 @@ export interface BookModel {
   imageURLS: string;
   imageURLM: string;
   imageURLL: string;
-  rating: number;
+  rating?: number;
   description: string;
-  userId: number;
+  userId: string;
   price: number;
 }

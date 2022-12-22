@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { BookModel } from "../../../api/models/book.model";
 import "./commentForm.styles.css";
 import { useUserContext } from "../../../utils/utils";
-import { useAPI } from "../../../utils/hooks";
+import { addComment } from "../../../api/CommentAPI";
 
 interface CommentFormProps {
   currentBook: BookModel;
@@ -18,7 +18,6 @@ const initialValues = {
 //TODO Add formik
 const CommentForm: FunctionComponent<CommentFormProps> = ({ currentBook }) => {
   const { currentUser } = useUserContext();
-  const { CommentsAPI } = useAPI();
   const navigate = useNavigate();
   const [formFields, setFormFields] = useState(initialValues);
   const [validated, setValidated] = useState(false);
@@ -33,7 +32,7 @@ const CommentForm: FunctionComponent<CommentFormProps> = ({ currentBook }) => {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (
     event
   ) => {
-    if (!currentUser?.id) {
+    if (!currentUser?.uid) {
       navigate("/auth");
       return;
     }
@@ -51,10 +50,10 @@ const CommentForm: FunctionComponent<CommentFormProps> = ({ currentBook }) => {
       throw new Error("no book id");
     }
 
-    const id = await CommentsAPI.add({
+    const id = await addComment({
       ...formFields,
       bookId: currentBook.id,
-      userId: currentUser.id,
+      userId: currentUser.uid,
     });
 
     setFormFields(initialValues);

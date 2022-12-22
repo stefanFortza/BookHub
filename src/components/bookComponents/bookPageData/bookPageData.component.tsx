@@ -2,7 +2,6 @@ import { FunctionComponent } from "react";
 import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { BookModel } from "../../../api/models/book.model";
-import { useAPI } from "../../../utils/hooks";
 import { useUserContext } from "../../../utils/utils";
 
 interface BookPageDataProps {
@@ -11,7 +10,6 @@ interface BookPageDataProps {
 
 const BookPageData: FunctionComponent<BookPageDataProps> = ({ book }) => {
   const navigate = useNavigate();
-  const API = useAPI();
   const { currentUser } = useUserContext();
   const { title, author, description, price, id, userId, imageURLL } = book;
 
@@ -19,7 +17,7 @@ const BookPageData: FunctionComponent<BookPageDataProps> = ({ book }) => {
     event
   ) => {
     if (book.id) {
-      await API.BooksAPI.delete(book.id);
+      // await API.BooksAPI.delete(book.id);
     }
     navigate("/");
   };
@@ -59,7 +57,7 @@ const BookPageData: FunctionComponent<BookPageDataProps> = ({ book }) => {
               >
                 Add to cart
               </Button>
-              {currentUser?.id === book.userId ? (
+              {currentUser?.uid === book.userId ? (
                 <Col>
                   <Button
                     variant="danger"

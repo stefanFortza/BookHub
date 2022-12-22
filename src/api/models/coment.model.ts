@@ -1,7 +1,7 @@
 export interface CommentModel {
-  id?: number;
-  bookId: number;
+  id?: string;
+  bookId: string;
   comment: string;
   rating: number;
-  userId: number;
+  userId: string;
 }

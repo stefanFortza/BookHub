@@ -26,9 +26,9 @@ export const router = createBrowserRouter([
           },
           {
             path: PageNames.AddBook,
-            loader: withAuth(({ request }) => {
-              console.log(request.url);
-            }),
+            // loader: withAuth(({ request }) => {
+            //   console.log(request.url);
+            // }),
             element: <AddBookPage />,
           },
           {

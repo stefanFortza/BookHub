@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { BookModel } from "../../../api/models/book.model";
 import { UserContext } from "../../../contexts/user/user.context";
+import { addDoc, collection, doc } from "firebase/firestore";
+import { db } from "../../../utils/firebase";
+import BookAPI from "../../../api/BookAPI";
 
 interface AddABookFormProps {}
 
@@ -35,7 +38,7 @@ const AddBookSchema = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-  image: Yup.mixed().required(),
+  image: Yup.mixed(),
 });
 
 const AddBookForm: FunctionComponent<AddABookFormProps> = (props) => {
@@ -46,9 +49,10 @@ const AddBookForm: FunctionComponent<AddABookFormProps> = (props) => {
     onSubmit: async (values, { setSubmitting, validateForm }) => {
       setSubmitting(false);
       const { author, description, image, price, title } = values;
-      if (!image) {
-        return;
-      }
+      // if (!image) {
+      //   return;
+      // }
+      // BookAPI.add({author,description,price,title,publisher:"eu",})
 
       // const id = await BooksAPI.add({
       //   author,
@@ -59,6 +63,7 @@ const AddBookForm: FunctionComponent<AddABookFormProps> = (props) => {
       //   userId: currentUser?.id!,
       // });
     },
+
     validationSchema: AddBookSchema,
   });
   const {

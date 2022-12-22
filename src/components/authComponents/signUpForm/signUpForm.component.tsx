@@ -4,31 +4,40 @@ import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { UserContext } from "../../../contexts/user/user.context";
+import { AuthAPI } from "../../../api/auth/AuthAPI";
+import { useUserContext } from "../../../utils/utils";
 
 interface SignUpFormProps {}
 
 const initialSignUpFormValues = {
   email: "",
   password: "",
-  username: "",
+  displayName: "",
   confirmPassword: "",
 };
 
 const signUpFormSchema = yup.object({
   email: yup.string().email().required(),
-  username: yup.string().min(3).required(),
+  displayName: yup.string().min(3).required(),
   password: yup.string().min(3).required(),
   confirmPassword: yup.string().min(3).required(),
 });
 
 const SignUpForm: FunctionComponent<SignUpFormProps> = () => {
-  const { signInUser } = useContext(UserContext);
+  const { currentUser } = useUserContext();
   const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: initialSignUpFormValues,
     validationSchema: signUpFormSchema,
     onSubmit: async (values, { setSubmitting, setFieldError }) => {
       setSubmitting(false);
+      const user = await AuthAPI.signUpUserWithEmailAndPassword(
+        values.email,
+        values.password,
+        values.displayName
+      );
+      navigate("/");
     },
   });
 
@@ -60,16 +69,16 @@ const SignUpForm: FunctionComponent<SignUpFormProps> = () => {
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="usernameSignUp">
-        <Form.Label>Username</Form.Label>
+        <Form.Label>Display Name</Form.Label>
         <Form.Control
           type="text"
-          name="username"
-          placeholder="Enter username"
-          value={values.username}
+          name="displayName"
+          placeholder="Enter Display Name"
+          value={values.displayName}
           onChange={handleChange}
           onBlur={handleBlur}
-          isValid={touched.username && !errors.username}
-          isInvalid={touched.username && !!errors.username}
+          isValid={touched.displayName && !errors.displayName}
+          isInvalid={touched.displayName && !!errors.displayName}
         />
         <Form.Text className="text-muted">
           We'll never share your userName with anyone else.

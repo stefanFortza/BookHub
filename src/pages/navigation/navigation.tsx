@@ -3,15 +3,17 @@ import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Outlet, useNavigate } from "react-router-dom";
 import { UserContext } from "../../contexts/user/user.context";
 import { AbsolutePageNames, PageNames } from "./pagesNames";
+import { AuthAPI } from "../../api/auth/AuthAPI";
+import { bookCount, seedDB } from "../../api/populate/seedDB";
 
 interface NavigationProps {}
 
 const Navigation: FunctionComponent<NavigationProps> = () => {
   const navigate = useNavigate();
-  const { currentUser, signOutUser } = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
 
   const signOut = async () => {
-    await signOutUser();
+    await AuthAPI.signOutUser();
     navigate(0);
   };
 
@@ -44,6 +46,12 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
               >
                 Add a book
               </Nav.Link>
+              <Navbar.Text>
+                <Button onClick={seedDB}>SeedDB</Button>
+              </Navbar.Text>
+              <Navbar.Text>
+                <Button onClick={bookCount}>Count</Button>
+              </Navbar.Text>
               <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2">
@@ -62,7 +70,7 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
               {currentUser ? (
                 <>
                   <Nav.Link onClick={signOut}>Sign Out</Nav.Link>
-                  <Navbar.Text>{currentUser.username}</Navbar.Text>
+                  <Navbar.Text>{currentUser.displayName}</Navbar.Text>
                 </>
               ) : (
                 <Nav.Link onClick={() => navigate(PageNames.Auth)}>
