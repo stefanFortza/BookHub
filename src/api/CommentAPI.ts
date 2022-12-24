@@ -1,17 +1,22 @@
 import {
   CollectionReference,
   DocumentReference,
+  arrayUnion,
   collection,
   doc,
   getDoc,
   getDocs,
+  query,
   setDoc,
+  updateDoc,
+  where,
 } from "firebase/firestore";
 import { BookModel } from "./models/book.model";
 import { db } from "../utils/firebase";
 import { CommentModel, IComment } from "./models/coment.model";
 import { uuidv4 } from "@firebase/util";
-import { UserModel } from "./models/user.model";
+import { getBookDocRef } from "./BookAPI";
+import { getUserDocRef } from "./AuthAPI";
 
 export async function addComment(
   comment: IComment,
@@ -19,25 +24,44 @@ export async function addComment(
   userId: string
 ) {
   const id = uuidv4();
-  const bookRef = doc(db, "books", bookId) as DocumentReference<BookModel>;
-  const commentRef = doc(db, "comments", id) as DocumentReference<CommentModel>;
-  const userRef = doc(db, "users", userId) as DocumentReference<UserModel>;
+  const bookRef = getBookDocRef(bookId);
+  const commentRef = getCommentDocRef(id);
+  const userRef = getUserDocRef(userId);
 
-  await setDoc<CommentModel>(commentRef, { ...comment, id, bookRef, userRef });
+  await updateDoc(bookRef, {
+    commentsRef: arrayUnion(commentRef),
+  });
+
+  await setDoc(commentRef, { ...comment, id, userRef });
 }
 
-export async function getComment(id: string) {
-  const docRef = doc(db, "comments", id) as DocumentReference<CommentModel>;
+export async function getComment(commentId: string) {
+  const docRef = getCommentDocRef(commentId);
   const docSnap = await getDoc(docRef);
   return docSnap.data();
 }
 
-export async function getAllComments() {
-  const col = collection(db, "books") as CollectionReference<BookModel>;
-  const snapshot = await getDocs(col);
-  const books: BookModel[] = [];
-  snapshot.forEach((book) => {
-    books.push({ ...book.data(), id: book.id });
-  });
-  return books;
+export async function getAllComments(bookId: string): Promise<CommentModel[]> {
+  const bookRef = getBookDocRef(bookId);
+  const bookSnap = await getDoc(bookRef);
+  const book = bookSnap.data();
+
+  if (!book) return [];
+
+  let comments: CommentModel[] = [];
+  for (const comment of book.commentsRef) {
+    const comSnap = await getDoc(comment);
+    const data = comSnap.data();
+    if (data) {
+      comments.push(data);
+    }
+  }
+
+  return comments;
+}
+
+export function getCommentDocRef(
+  commentId: string
+): DocumentReference<CommentModel> {
+  return doc(db, "comments", commentId) as DocumentReference<CommentModel>;
 }

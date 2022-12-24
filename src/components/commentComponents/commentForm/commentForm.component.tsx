@@ -59,6 +59,7 @@ const CommentForm: FunctionComponent<CommentFormProps> = ({ currentBook }) => {
     );
 
     setFormFields(initialValues);
+    navigate(0);
   };
   return (
     <Row className="justify-content-md-center">

@@ -1,5 +1,6 @@
 import { DocumentReference } from "firebase/firestore";
 import { UserModel } from "./user.model";
+import { CommentModel } from "./coment.model";
 
 export interface IBook {
   title: string;
@@ -16,4 +17,5 @@ export interface BookModel extends IBook {
   id: string;
   // rating?: number;
   userRef: DocumentReference<UserModel>;
+  commentsRef: DocumentReference<CommentModel>[];
 }

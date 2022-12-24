@@ -1,16 +1,15 @@
-import { FunctionComponent, useMemo } from "react";
+import { FunctionComponent, useEffect, useMemo, useState } from "react";
 import { CommentModel } from "../../../api/models/coment.model";
 import { UserModel } from "../../../api/models/user.model";
+import { getUser } from "../../../api/AuthAPI";
 
 interface CommentProps {
   comment: CommentModel;
-  user: UserModel;
 }
 
-const CommentComponent: FunctionComponent<CommentProps> = ({
-  comment,
-  user,
-}) => {
+const CommentComponent: FunctionComponent<CommentProps> = ({ comment }) => {
+  const [user, setUser] = useState<UserModel | undefined>(undefined);
+
   let ratingJSX: JSX.Element[] = useMemo(() => {
     let mut: JSX.Element[] = [];
     for (let i = 0; i < comment.rating; i++) {
@@ -22,9 +21,13 @@ const CommentComponent: FunctionComponent<CommentProps> = ({
     return mut;
   }, [comment.rating]);
 
+  useEffect(() => {
+    getUser(comment.userRef).then((user) => setUser(user));
+  }, []);
+
   return (
     <div>
-      {/* <h2>{user ? user.username : ""}</h2> */}
+      <h2>{user ? user.displayName : ""}</h2>
       <div>{comment.comment}</div>
       {ratingJSX}
     </div>

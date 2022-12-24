@@ -1,6 +1,6 @@
 import { createContext, FunctionComponent, useState, useEffect } from "react";
 import { User, UserCredential } from "firebase/auth";
-import { onAuthStateChangedListner } from "../../api/auth/AuthAPI";
+import { onAuthStateChangedListner } from "../../api/AuthAPI";
 
 interface IUserContext {
   currentUser: User | null;

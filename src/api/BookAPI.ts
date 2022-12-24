@@ -1,6 +1,7 @@
 import {
   CollectionReference,
   DocumentReference,
+  arrayUnion,
   collection,
   doc,
   getDoc,
@@ -8,11 +9,13 @@ import {
   limit,
   query,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { BookModel, IBook } from "./models/book.model";
 import { db } from "../utils/firebase";
 import { uuidv4 } from "@firebase/util";
 import { UserModel } from "./models/user.model";
+import { CommentModel } from "./models/coment.model";
 
 export async function addBook(book: IBook, userId: string) {
   const id = uuidv4();
@@ -23,6 +26,7 @@ export async function addBook(book: IBook, userId: string) {
       ...book,
       id,
       userRef,
+      commentsRef: [],
     }
   );
 }
@@ -31,6 +35,10 @@ export async function getBook(id: string) {
   const docRef = doc(db, "books", id) as DocumentReference<BookModel>;
   const docSnap = await getDoc(docRef);
   return docSnap.data();
+}
+
+export function getBookDocRef(bookId: string): DocumentReference<BookModel> {
+  return doc(db, "books", bookId) as DocumentReference<BookModel>;
 }
 
 export async function getAllBooks() {

@@ -4,7 +4,7 @@ import { Button, Form } from "react-bootstrap";
 import * as yup from "yup";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useUserContext } from "../../../utils/utils";
-import { signInUserWithEmailAndPassword } from "../../../api/auth/AuthAPI";
+import { signInUserWithEmailAndPassword } from "../../../api/AuthAPI";
 
 interface SignInFormProps {}
 

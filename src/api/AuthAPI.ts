@@ -8,9 +8,10 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
-import { auth, db } from "../../utils/firebase";
-import { DocumentReference, doc, setDoc } from "firebase/firestore";
-import { UserModel } from "../models/user.model";
+import { auth, db } from "../utils/firebase";
+import { DocumentReference, doc, getDoc, setDoc } from "firebase/firestore";
+import { UserModel } from "./models/user.model";
+import { async } from "@firebase/util";
 
 export async function signUpUserWithEmailAndPassword(
   email: string,
@@ -52,4 +53,14 @@ export async function signOutUser() {
 
 export function onAuthStateChangedListner(callback: NextOrObserver<User>) {
   return onAuthStateChanged(auth, callback);
+}
+
+export function getUserDocRef(userId: string): DocumentReference<UserModel> {
+  return doc(db, "users", userId) as DocumentReference<UserModel>;
+}
+
+export async function getUser(
+  userRef: DocumentReference<UserModel>
+): Promise<UserModel | undefined> {
+  return (await getDoc(userRef)).data();
 }

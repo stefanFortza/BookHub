@@ -4,7 +4,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { UserContext } from "../../contexts/user/user.context";
 import { PageNames } from "./pagesNames";
 import { bookCount, seedDB } from "../../api/populate/seedDB";
-import { signOutUser } from "../../api/auth/AuthAPI";
+import { signOutUser } from "../../api/AuthAPI";
 
 interface NavigationProps {}
 

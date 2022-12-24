@@ -9,6 +9,5 @@ export interface IComment {
 
 export interface CommentModel extends IComment {
   id?: string;
-  bookRef: DocumentReference<BookModel>;
   userRef: DocumentReference<UserModel>;
 }
