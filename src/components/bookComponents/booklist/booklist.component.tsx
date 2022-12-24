@@ -5,20 +5,17 @@ import Filters from "../filters/filters.component";
 import { BookModel } from "../../../api/models/book.model";
 import { getAllBooks, getBooks } from "../../../api/BookAPI";
 
-interface BooksProps {}
+interface BookListProps {
+  books: BookModel[];
+}
 
-const BookList: FunctionComponent<BooksProps> = () => {
+const BookList: FunctionComponent<BookListProps> = ({ books }) => {
   const [filters, setFilters] = useState("all");
-  const [books, setBooks] = useState<BookModel[]>([]);
-
-  useEffect(() => {
-    getBooks(25).then((books) => setBooks(books));
-  });
 
   return (
     <Row xs={1} md={2} className="g-4 mt-4">
       <Col md={2}>
-        <Filters setFilters={setFilters} />
+        <Filters setFilters={setFilters} books={books} />
       </Col>
       <Col md={10}>
         <Row xs={1} md={3} lg={4} xl={5} className="g-4">

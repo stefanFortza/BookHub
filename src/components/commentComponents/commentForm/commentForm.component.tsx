@@ -7,7 +7,7 @@ import { useUserContext } from "../../../utils/utils";
 import { addComment } from "../../../api/CommentAPI";
 
 interface CommentFormProps {
-  currentBook: BookModel;
+  bookId: string;
 }
 
 const initialValues = {
@@ -16,7 +16,7 @@ const initialValues = {
 };
 
 //TODO Add formik
-const CommentForm: FunctionComponent<CommentFormProps> = ({ currentBook }) => {
+const CommentForm: FunctionComponent<CommentFormProps> = ({ bookId }) => {
   const { currentUser } = useUserContext();
   const navigate = useNavigate();
   const [formFields, setFormFields] = useState(initialValues);
@@ -46,15 +46,11 @@ const CommentForm: FunctionComponent<CommentFormProps> = ({ currentBook }) => {
       return;
     }
 
-    if (!currentBook.id) {
-      throw new Error("no book id");
-    }
-
     const id = await addComment(
       {
         ...formFields,
       },
-      currentBook.id,
+      bookId,
       currentUser.uid
     );
 

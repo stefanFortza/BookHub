@@ -7,7 +7,9 @@ import { UserContext } from "../../../contexts/user/user.context";
 import { signUpUserWithEmailAndPassword } from "../../../api/AuthAPI";
 import { useUserContext } from "../../../utils/utils";
 
-interface SignUpFormProps {}
+interface SignUpFormProps {
+  from: string;
+}
 
 const initialSignUpFormValues = {
   email: "",
@@ -23,7 +25,7 @@ const signUpFormSchema = yup.object({
   confirmPassword: yup.string().min(3).required(),
 });
 
-const SignUpForm: FunctionComponent<SignUpFormProps> = () => {
+const SignUpForm: FunctionComponent<SignUpFormProps> = ({ from }) => {
   const { currentUser } = useUserContext();
   const navigate = useNavigate();
 
@@ -37,7 +39,8 @@ const SignUpForm: FunctionComponent<SignUpFormProps> = () => {
         values.password,
         values.displayName
       );
-      navigate("/");
+
+      navigate(from);
     },
   });
 

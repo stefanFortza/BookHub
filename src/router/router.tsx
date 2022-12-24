@@ -1,50 +1,42 @@
-import { createBrowserRouter, useParams } from "react-router-dom";
+import {
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+} from "react-router-dom";
 import AddBookPage from "../pages/addBookPage/addBookPage";
-import AuthentificationPage from "../pages/authentificationPage/authentificationPage";
-import BookPage from "../pages/bookPage/bookPage";
+import AuthentificationPage, {
+  authentificationPageLoader,
+} from "../pages/authentificationPage/authentificationPage";
+import ShowBookPage, {
+  showBookPageLoader,
+} from "../pages/showBookPage/showBookPage";
 import EditBookPage from "../pages/editBookPage/editBookPage";
-import Home from "../pages/home/home";
+import BooksPage, { booksPageLoader } from "../pages/booksPage/booksPage";
 import Navigation from "../pages/navigation/navigation";
 import { PageNames } from "../pages/navigation/pagesNames";
-import { withAuth } from "../utils/utils";
+import ProtectedRoute from "../utils/protectedRoute";
 
-export const router = createBrowserRouter([
-  {
-    path: PageNames.Root,
-    element: <Navigation />,
-    children: [
-      {
-        index: true,
-        element: <div>Home Page</div>,
-      },
-      {
-        path: PageNames.Books,
-        children: [
-          {
-            index: true,
-            element: <Home />,
-          },
-          {
-            path: PageNames.AddBook,
-            // loader: withAuth(({ request }) => {
-            //   console.log(request.url);
-            // }),
-            element: <AddBookPage />,
-          },
-          {
-            path: PageNames.EditBook,
-            element: <EditBookPage />,
-          },
-          {
-            path: PageNames.ShowBook,
-            element: <BookPage />,
-          },
-        ],
-      },
-      {
-        path: PageNames.Auth,
-        element: <AuthentificationPage />,
-      },
-    ],
-  },
-]);
+export const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path={PageNames.Root} element={<Navigation />}>
+      <Route index element={<div>Home Page</div>} />
+      <Route path={PageNames.Books}>
+        <Route index element={<BooksPage />} loader={booksPageLoader} />
+        <Route element={<ProtectedRoute />}>
+          <Route path={PageNames.AddBook} element={<AddBookPage />} />
+          <Route path={PageNames.EditBook} element={<EditBookPage />} />
+          <Route
+            path={PageNames.ShowBook}
+            element={<ShowBookPage />}
+            loader={showBookPageLoader}
+          />
+        </Route>
+      </Route>
+      <Route
+        path={PageNames.Auth}
+        element={<AuthentificationPage />}
+        loader={authentificationPageLoader}
+      />
+    </Route>
+  )
+);

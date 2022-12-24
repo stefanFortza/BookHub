@@ -2,11 +2,13 @@ import { useFormik } from "formik";
 import { FunctionComponent } from "react";
 import { Button, Form } from "react-bootstrap";
 import * as yup from "yup";
-import { useLocation, useNavigate } from "react-router-dom";
+import { redirect, useLocation, useNavigate } from "react-router-dom";
 import { useUserContext } from "../../../utils/utils";
 import { signInUserWithEmailAndPassword } from "../../../api/AuthAPI";
 
-interface SignInFormProps {}
+interface SignInFormProps {
+  from: string;
+}
 
 const initialSignInFormValues = {
   email: "",
@@ -18,16 +20,17 @@ const signInFormSchema = yup.object({
   password: yup.string().required(),
 });
 
-const SignInForm: FunctionComponent<SignInFormProps> = () => {
-  const location = useLocation();
+const SignInForm: FunctionComponent<SignInFormProps> = ({ from }) => {
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: initialSignInFormValues,
     validationSchema: signInFormSchema,
-    onSubmit: async (values, { setSubmitting }) => {
-      setSubmitting(false);
+    onSubmit: async (values, { setSubmitting, submitForm }) => {
+      setSubmitting(true);
       await signInUserWithEmailAndPassword(values.email, values.password);
+      setSubmitting(false);
+      navigate(from);
     },
   });
   const { errors, touched, handleChange, values, handleBlur } = formik;

@@ -1,6 +1,11 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { Container, Spinner } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import {
+  LoaderFunction,
+  LoaderFunctionArgs,
+  useLoaderData,
+  useParams,
+} from "react-router-dom";
 import BookPageData from "../../components/bookComponents/bookPageData/bookPageData.component";
 import CommentForm from "../../components/commentComponents/commentForm/commentForm.component";
 import CommentList from "../../components/commentComponents/commentList/commentList.component";
@@ -9,35 +14,35 @@ import { getBook } from "../../api/BookAPI";
 
 interface BookProps {}
 
-const BookPage: FunctionComponent<BookProps> = () => {
-  const { bookId } = useParams();
-  const [currentBook, setCurrentBook] = useState<BookModel | undefined>(
-    undefined
-  );
+export const showBookPageLoader: LoaderFunction = async ({ params }) => {
+  const { bookId } = params;
+  if (!bookId) {
+    throw new Response("Book Not Found");
+  }
+  const book = await getBook(bookId);
+  if (!book) throw new Response("Book Not Found");
 
-  useEffect(() => {
-    if (bookId) {
-      getBook(bookId).then((book) => setCurrentBook(book));
-    }
-  }, []);
+  // const comments =
+  return book;
+};
+
+const ShowBookPage: FunctionComponent<BookProps> = () => {
+  const currentBook = useLoaderData() as BookModel;
 
   return (
     <Container className="mb-5">
       <h1 className="text-center my-5">{currentBook?.title}</h1>
-      {currentBook ? (
-        <BookPageData book={currentBook} />
-      ) : (
-        <Spinner animation="border" role="status">
+      <BookPageData book={currentBook} />
+      {/* <Spinner animation="border" role="status">
           <span className="visually-hidden">Loading...</span>
-        </Spinner>
-      )}
+        </Spinner> */}
       <h1 className="text-center mt-5">De la acelasi autor:</h1>
       <h1 className="text-center mt-5">Comments Section</h1>
-      {currentBook && <CommentForm currentBook={currentBook} />}
+      {currentBook && <CommentForm bookId={currentBook.id} />}
 
       {currentBook && <CommentList currentBook={currentBook} />}
     </Container>
   );
 };
 
-export default BookPage;
+export default ShowBookPage;

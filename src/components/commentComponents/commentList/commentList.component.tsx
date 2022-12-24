@@ -3,6 +3,7 @@ import { BookModel } from "../../../api/models/book.model";
 import CommentComponent from "../commentComponent/commentComponent.component";
 import { CommentModel } from "../../../api/models/coment.model";
 import { getAllComments } from "../../../api/CommentAPI";
+import { LoaderFunctionArgs } from "react-router-dom";
 
 interface CommentListProps {
   currentBook: BookModel;
