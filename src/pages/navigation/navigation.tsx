@@ -2,9 +2,9 @@ import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Outlet, useNavigate } from "react-router-dom";
 import { UserContext } from "../../contexts/user/user.context";
-import { AbsolutePageNames, PageNames } from "./pagesNames";
-import { AuthAPI } from "../../api/auth/AuthAPI";
+import { PageNames } from "./pagesNames";
 import { bookCount, seedDB } from "../../api/populate/seedDB";
+import { signOutUser } from "../../api/auth/AuthAPI";
 
 interface NavigationProps {}
 
@@ -13,7 +13,7 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
   const { currentUser } = useContext(UserContext);
 
   const signOut = async () => {
-    await AuthAPI.signOutUser();
+    await signOutUser();
     navigate(0);
   };
 
@@ -31,15 +31,11 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse>
             <Nav className="me-auto">
-              <Nav.Link onClick={() => navigate(AbsolutePageNames.Root)}>
-                Home
-              </Nav.Link>
-              <Nav.Link onClick={() => navigate(AbsolutePageNames.Books)}>
-                Books Page
-              </Nav.Link>
+              <Nav.Link onClick={() => navigate("/")}>Home</Nav.Link>
+              <Nav.Link onClick={() => navigate("/books")}>Books Page</Nav.Link>
               <Nav.Link
                 onClick={() =>
-                  navigate(AbsolutePageNames.AddBook, {
+                  navigate("/books/add", {
                     state: { from: "/books/add" },
                   })
                 }

@@ -50,11 +50,13 @@ const CommentForm: FunctionComponent<CommentFormProps> = ({ currentBook }) => {
       throw new Error("no book id");
     }
 
-    const id = await addComment({
-      ...formFields,
-      bookId: currentBook.id,
-      userId: currentUser.uid,
-    });
+    const id = await addComment(
+      {
+        ...formFields,
+      },
+      currentBook.id,
+      currentUser.uid
+    );
 
     setFormFields(initialValues);
   };

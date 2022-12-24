@@ -1,7 +1,6 @@
 import {
   CollectionReference,
   DocumentReference,
-  addDoc,
   collection,
   doc,
   getDoc,
@@ -9,19 +8,23 @@ import {
   limit,
   query,
   setDoc,
-  startAt,
-  updateDoc,
 } from "firebase/firestore";
-import { BookModel } from "./models/book.model";
+import { BookModel, IBook } from "./models/book.model";
 import { db } from "../utils/firebase";
 import { uuidv4 } from "@firebase/util";
+import { UserModel } from "./models/user.model";
 
-export async function addBook(book: BookModel) {
+export async function addBook(book: IBook, userId: string) {
   const id = uuidv4();
-  await setDoc(doc(db, "books", id), {
-    ...book,
-    id,
-  });
+  const userRef = doc(db, "users", userId) as DocumentReference<UserModel>;
+  await setDoc<BookModel>(
+    doc(db, "books", id) as DocumentReference<BookModel>,
+    {
+      ...book,
+      id,
+      userRef,
+    }
+  );
 }
 
 export async function getBook(id: string) {

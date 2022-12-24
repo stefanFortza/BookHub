@@ -1,5 +1,7 @@
-export interface BookModel {
-  id?: string;
+import { DocumentReference } from "firebase/firestore";
+import { UserModel } from "./user.model";
+
+export interface IBook {
   title: string;
   author: string;
   yearOfPublication: string;
@@ -7,8 +9,11 @@ export interface BookModel {
   imageURLS: string;
   imageURLM: string;
   imageURLL: string;
-  rating?: number;
-  description: string;
-  userId: string;
   price: number;
+  description: string;
+}
+export interface BookModel extends IBook {
+  id: string;
+  // rating?: number;
+  userRef: DocumentReference<UserModel>;
 }

@@ -1,6 +1,6 @@
 import { createContext, FunctionComponent, useState, useEffect } from "react";
 import { User, UserCredential } from "firebase/auth";
-import { AuthAPI } from "../../api/auth/AuthAPI";
+import { onAuthStateChangedListner } from "../../api/auth/AuthAPI";
 
 interface IUserContext {
   currentUser: User | null;
@@ -20,7 +20,7 @@ const UserContextProvider: FunctionComponent<UserContextProviderProps> = (
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const unsubscribe = AuthAPI.onAuthStateChangedListner((user) => {
+    const unsubscribe = onAuthStateChangedListner((user) => {
       setCurrentUser(user);
     });
 

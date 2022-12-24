@@ -8,49 +8,48 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
-import { auth } from "../../utils/firebase";
+import { auth, db } from "../../utils/firebase";
+import { DocumentReference, doc, setDoc } from "firebase/firestore";
+import { UserModel } from "../models/user.model";
 
-class AuthApi {
-  private auth: Auth;
-  constructor(auth: Auth) {
-    this.auth = auth;
-  }
+export async function signUpUserWithEmailAndPassword(
+  email: string,
+  password: string,
+  displayName: string
+) {
+  const { user } = await createUserWithEmailAndPassword(auth, email, password);
 
-  public async signUpUserWithEmailAndPassword(
-    email: string,
-    password: string,
-    displayName: string
-  ) {
-    const userCredentials = await createUserWithEmailAndPassword(
-      this.auth,
-      email,
-      password
-    );
+  await updateProfile(user, {
+    displayName,
+  });
 
-    await updateProfile(userCredentials.user, {
-      displayName,
-    });
+  const userRef = doc(db, "users", user.uid) as DocumentReference<UserModel>;
+  await setDoc(userRef, {
+    displayName: user.displayName,
+    email: user.email,
+    id: user.uid,
+  });
 
-    return this.auth.currentUser;
-  }
-
-  public async signInUserWithEmailAndPassword(email: string, password: string) {
-    const userCredential = await signInWithEmailAndPassword(
-      this.auth,
-      email,
-      password
-    );
-    console.log(userCredential.user);
-    return userCredential;
-  }
-
-  public async signOutUser() {
-    return signOut(auth);
-  }
-
-  public onAuthStateChangedListner(callback: NextOrObserver<User>) {
-    return onAuthStateChanged(this.auth, callback);
-  }
+  return auth.currentUser;
 }
 
-export const AuthAPI = new AuthApi(auth);
+export async function signInUserWithEmailAndPassword(
+  email: string,
+  password: string
+) {
+  const userCredential = await signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
+  console.log(userCredential.user);
+  return userCredential;
+}
+
+export async function signOutUser() {
+  return signOut(auth);
+}
+
+export function onAuthStateChangedListner(callback: NextOrObserver<User>) {
+  return onAuthStateChanged(auth, callback);
+}

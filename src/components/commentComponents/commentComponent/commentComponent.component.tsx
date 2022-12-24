@@ -24,7 +24,7 @@ const CommentComponent: FunctionComponent<CommentProps> = ({
 
   return (
     <div>
-      <h2>{user ? user.username : ""}</h2>
+      {/* <h2>{user ? user.username : ""}</h2> */}
       <div>{comment.comment}</div>
       {ratingJSX}
     </div>

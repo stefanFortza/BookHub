@@ -4,7 +4,7 @@ import { Button, Form } from "react-bootstrap";
 import * as yup from "yup";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useUserContext } from "../../../utils/utils";
-import { AuthAPI } from "../../../api/auth/AuthAPI";
+import { signInUserWithEmailAndPassword } from "../../../api/auth/AuthAPI";
 
 interface SignInFormProps {}
 
@@ -27,10 +27,7 @@ const SignInForm: FunctionComponent<SignInFormProps> = () => {
     validationSchema: signInFormSchema,
     onSubmit: async (values, { setSubmitting }) => {
       setSubmitting(false);
-      await AuthAPI.signInUserWithEmailAndPassword(
-        values.email,
-        values.password
-      );
+      await signInUserWithEmailAndPassword(values.email, values.password);
     },
   });
   const { errors, touched, handleChange, values, handleBlur } = formik;

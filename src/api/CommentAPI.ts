@@ -1,21 +1,29 @@
 import {
   CollectionReference,
   DocumentReference,
-  Firestore,
-  addDoc,
   collection,
   doc,
   getDoc,
   getDocs,
-  getFirestore,
   setDoc,
 } from "firebase/firestore";
 import { BookModel } from "./models/book.model";
 import { db } from "../utils/firebase";
-import { CommentModel } from "./models/coment.model";
+import { CommentModel, IComment } from "./models/coment.model";
+import { uuidv4 } from "@firebase/util";
+import { UserModel } from "./models/user.model";
 
-export async function addComment(comment: CommentModel) {
-  await addDoc(collection(db, "comments"), { ...comment });
+export async function addComment(
+  comment: IComment,
+  bookId: string,
+  userId: string
+) {
+  const id = uuidv4();
+  const bookRef = doc(db, "books", bookId) as DocumentReference<BookModel>;
+  const commentRef = doc(db, "comments", id) as DocumentReference<CommentModel>;
+  const userRef = doc(db, "users", userId) as DocumentReference<UserModel>;
+
+  await setDoc<CommentModel>(commentRef, { ...comment, id, bookRef, userRef });
 }
 
 export async function getComment(id: string) {

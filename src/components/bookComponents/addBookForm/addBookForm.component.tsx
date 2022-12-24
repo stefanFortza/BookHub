@@ -5,9 +5,6 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { BookModel } from "../../../api/models/book.model";
 import { UserContext } from "../../../contexts/user/user.context";
-import { addDoc, collection, doc } from "firebase/firestore";
-import { db } from "../../../utils/firebase";
-import BookAPI from "../../../api/BookAPI";
 
 interface AddABookFormProps {}
 

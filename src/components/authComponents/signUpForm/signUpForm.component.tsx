@@ -4,7 +4,7 @@ import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { UserContext } from "../../../contexts/user/user.context";
-import { AuthAPI } from "../../../api/auth/AuthAPI";
+import { signUpUserWithEmailAndPassword } from "../../../api/auth/AuthAPI";
 import { useUserContext } from "../../../utils/utils";
 
 interface SignUpFormProps {}
@@ -32,7 +32,7 @@ const SignUpForm: FunctionComponent<SignUpFormProps> = () => {
     validationSchema: signUpFormSchema,
     onSubmit: async (values, { setSubmitting, setFieldError }) => {
       setSubmitting(false);
-      const user = await AuthAPI.signUpUserWithEmailAndPassword(
+      const user = await signUpUserWithEmailAndPassword(
         values.email,
         values.password,
         values.displayName

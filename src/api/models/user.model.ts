@@ -1,6 +1,8 @@
-export interface UserModel {
-  id?: number;
+export interface IUser {
   email: string;
-  password: string;
   displayName: string;
+}
+
+export interface UserModel extends IUser {
+  id: string;
 }

@@ -1,6 +1,6 @@
 import { collection, getCountFromServer, getDocs } from "firebase/firestore";
 import { addBook } from "../BookAPI";
-import { BookModel } from "../models/book.model";
+import { BookModel, IBook } from "../models/book.model";
 import data from "./BX-MostPopular.json";
 import { db } from "../../utils/firebase";
 import { getAuth } from "firebase/auth";
@@ -9,14 +9,13 @@ export const seedDB = async () => {
   const auth = getAuth();
   for (let i = 0; i < 100; i++) {
     const book = (data as any)[i];
-    const bookToAdd: BookModel = {
+    const bookToAdd: IBook = {
       ...book,
       description: "",
       price: 1,
-      userId: auth.currentUser?.uid || 1,
     };
     // console.log(bookToAdd);
-    addBook(bookToAdd);
+    addBook(bookToAdd, auth.currentUser?.uid || "1");
   }
 };
 

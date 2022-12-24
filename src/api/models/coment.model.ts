@@ -1,7 +1,14 @@
-export interface CommentModel {
-  id?: string;
-  bookId: string;
+import { DocumentReference } from "firebase/firestore";
+import { BookModel } from "./book.model";
+import { UserModel } from "./user.model";
+
+export interface IComment {
   comment: string;
   rating: number;
-  userId: string;
+}
+
+export interface CommentModel extends IComment {
+  id?: string;
+  bookRef: DocumentReference<BookModel>;
+  userRef: DocumentReference<UserModel>;
 }
