@@ -14,7 +14,7 @@ import EditBookPage from "../pages/editBookPage/editBookPage";
 import BooksPage, { booksPageLoader } from "../pages/booksPage/booksPage";
 import Navigation from "../pages/navigation/navigation";
 import { PageNames } from "../pages/navigation/pagesNames";
-import ProtectedRoute from "../utils/protectedRoute";
+import ProtectedRoute, { protectedRouteLoader } from "../utils/protectedRoute";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,7 +22,7 @@ export const router = createBrowserRouter(
       <Route index element={<div>Home Page</div>} />
       <Route path={PageNames.Books}>
         <Route index element={<BooksPage />} loader={booksPageLoader} />
-        <Route element={<ProtectedRoute />}>
+        <Route element={<ProtectedRoute />} loader={protectedRouteLoader}>
           <Route path={PageNames.AddBook} element={<AddBookPage />} />
           <Route path={PageNames.EditBook} element={<EditBookPage />} />
           <Route

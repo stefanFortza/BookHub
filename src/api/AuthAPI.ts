@@ -11,7 +11,6 @@ import {
 import { auth, db } from "../utils/firebase";
 import { DocumentReference, doc, getDoc, setDoc } from "firebase/firestore";
 import { UserModel } from "./models/user.model";
-import { async } from "@firebase/util";
 
 export async function signUpUserWithEmailAndPassword(
   email: string,
@@ -59,7 +58,7 @@ export function getUserDocRef(userId: string): DocumentReference<UserModel> {
   return doc(db, "users", userId) as DocumentReference<UserModel>;
 }
 
-export async function getUser(
+export async function getUserData(
   userRef: DocumentReference<UserModel>
 ): Promise<UserModel | undefined> {
   return (await getDoc(userRef)).data();

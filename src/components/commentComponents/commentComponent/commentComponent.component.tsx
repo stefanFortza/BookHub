@@ -1,7 +1,7 @@
 import { FunctionComponent, useEffect, useMemo, useState } from "react";
 import { CommentModel } from "../../../api/models/coment.model";
 import { UserModel } from "../../../api/models/user.model";
-import { getUser } from "../../../api/AuthAPI";
+import { getUserData } from "../../../api/AuthAPI";
 
 interface CommentProps {
   comment: CommentModel;
@@ -22,7 +22,7 @@ const CommentComponent: FunctionComponent<CommentProps> = ({ comment }) => {
   }, [comment.rating]);
 
   useEffect(() => {
-    getUser(comment.userRef).then((user) => setUser(user));
+    getUserData(comment.userRef).then((user) => setUser(user));
   }, []);
 
   return (
