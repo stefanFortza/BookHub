@@ -1,89 +1,6 @@
-import { FunctionComponent, useContext, useEffect, useState } from "react";
-// import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import { UserContext } from "../../contexts/user/user.context";
-import { PageNames } from "./pagesNames";
-import { bookCount, seedDB } from "../../api/populate/seedDB";
+import { FunctionComponent } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import { signOutUser } from "../../api/AuthAPI";
-
-interface NavigationProps {}
-
-// const Navigation: FunctionComponent<NavigationProps> = () => {
-//   const navigate = useNavigate();
-//   const { currentUser } = useContext(UserContext);
-
-//   const signOut = async () => {
-//     await signOutUser();
-//     navigate(0);
-//   };
-
-//   return (
-//     <>
-//       <Navbar bg="dark" expand="lg" variant="dark">
-//         <Container>
-//           <Navbar.Brand>
-//             <i
-//               style={{ width: "30px", height: "30px" }}
-//               className="bi bi-book d-inline-block align-top"
-//             ></i>
-//             Book Shop
-//           </Navbar.Brand>
-//           <Navbar.Toggle aria-controls="basic-navbar-nav" />
-//           <Navbar.Collapse>
-//             <Nav className="me-auto">
-//               <Nav.Link onClick={() => navigate("/")}>Home</Nav.Link>
-//               <Nav.Link onClick={() => navigate("/books")}>Books Page</Nav.Link>
-//               <Nav.Link
-//                 onClick={() =>
-//                   navigate("/books/add", {
-//                     state: { from: "/books/add" },
-//                   })
-//                 }
-//               >
-//                 Add a book
-//               </Nav.Link>
-//               <Navbar.Text>
-//                 <Button onClick={seedDB}>SeedDB</Button>
-//               </Navbar.Text>
-//               <Navbar.Text>
-//                 <Button onClick={bookCount}>Count</Button>
-//               </Navbar.Text>
-//               <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-//                 <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-//                 <NavDropdown.Item href="#action/3.2">
-//                   Another action
-//                 </NavDropdown.Item>
-//                 <NavDropdown.Item href="#action/3.3">
-//                   Something
-//                 </NavDropdown.Item>
-//                 <NavDropdown.Divider />
-//                 <NavDropdown.Item href="#action/3.4">
-//                   Separated link
-//                 </NavDropdown.Item>
-//               </NavDropdown>
-//             </Nav>
-//             <Nav>
-//               {currentUser ? (
-//                 <>
-//                   <Nav.Link onClick={signOut}>Sign Out</Nav.Link>
-//                   <Navbar.Text>{currentUser.displayName}</Navbar.Text>
-//                 </>
-//               ) : (
-//                 <Nav.Link onClick={() => navigate(PageNames.Auth)}>
-//                   Sign In
-//                 </Nav.Link>
-//               )}
-//             </Nav>
-//           </Navbar.Collapse>
-//         </Container>
-//       </Navbar>
-//       <Outlet />
-//     </>
-//   );
-// };
-
-// export default Navigation;
-
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -97,8 +14,11 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
+import AutoStoriesSharpIcon from "@mui/icons-material/AutoStoriesSharp";
 import { useUserContext } from "../../utils/utils";
+import { seedDB } from "../../api/populate/seedDB";
+
+interface NavigationProps {}
 
 type NavElData = { name: string; link: string };
 const pages: NavElData[] = [
@@ -110,6 +30,7 @@ const settings: NavElData[] = [
   { name: "Profile", link: "/" },
   { name: "Account", link: "/" },
   { name: "Dashboard", link: "/" },
+  { name: "Add A book", link: "/books/add" },
 ];
 
 const Navigation: FunctionComponent<NavigationProps> = () => {
@@ -139,7 +60,7 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
 
   const signOut = async () => {
     await signOutUser();
-    // navigate(0);
+    navigate(0);
   };
 
   return (
@@ -147,7 +68,9 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
       <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+            <AutoStoriesSharpIcon
+              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+            />
             <Typography
               variant="h6"
               noWrap
@@ -208,7 +131,9 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
               </Menu>
             </Box>
 
-            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+            <AutoStoriesSharpIcon
+              sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+            />
             <Typography
               variant="h5"
               noWrap
@@ -240,11 +165,20 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
                   {name}
                 </Button>
               ))}
+              <Button
+                onClick={(e) => {
+                  handleCloseNavMenu();
+                  seedDB();
+                }}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                SeedDB
+              </Button>
             </Box>
 
             {/* User Icon */}
             {currentUser ? (
-              <Box sx={{ flexGrow: 0 }}>
+              <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "flex" } }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
@@ -253,6 +187,15 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
                     />
                   </IconButton>
                 </Tooltip>
+                <Button
+                  onClick={(e) => {
+                    handleCloseNavMenu();
+                    navigate("/auth");
+                  }}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {currentUser.displayName}
+                </Button>
                 <Menu
                   sx={{ mt: "45px" }}
                   id="menu-appbar"
@@ -290,7 +233,7 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
                 </Menu>
               </Box>
             ) : (
-              <Box sx={{ flexGrow: 0 }}>
+              <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "flex" } }}>
                 <Button
                   onClick={(e) => {
                     handleCloseNavMenu();

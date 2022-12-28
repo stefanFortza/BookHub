@@ -17,28 +17,40 @@ import { PageNames } from "../pages/navigation/pagesNames";
 import ProtectedRoute, {
   protectedRouteLoader,
 } from "../utils/components/protectedRoute";
+import SignInPage from "../pages/signInPage/signInPage";
+import SignUpPage from "../pages/signUpPage/signUpPage";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path={PageNames.Root} element={<Navigation />}>
-      <Route index element={<div>Home Page</div>} />
-      <Route path={PageNames.Books}>
-        <Route index element={<BooksPage />} loader={booksPageLoader} />
-        <Route element={<ProtectedRoute />} loader={protectedRouteLoader}>
-          <Route path={PageNames.AddBook} element={<AddBookPage />} />
-          <Route path={PageNames.EditBook} element={<EditBookPage />} />
-          <Route
-            path={PageNames.ShowBook}
-            element={<ShowBookPage />}
-            loader={showBookPageLoader}
-          />
+    <Route>
+      <Route element={<ProtectedRoute />} loader={protectedRouteLoader}>
+        <Route path={PageNames.Root} element={<Navigation />}>
+          <Route index element={<div>Home Page</div>} />
+
+          <Route path={PageNames.Books}>
+            <Route index element={<BooksPage />} loader={booksPageLoader} />
+
+            <Route path={PageNames.AddBook} element={<AddBookPage />} />
+
+            <Route path={PageNames.EditBook} element={<EditBookPage />} />
+
+            <Route
+              path={PageNames.ShowBook}
+              element={<ShowBookPage />}
+              loader={showBookPageLoader}
+            />
+          </Route>
         </Route>
       </Route>
+
       <Route
         path={PageNames.Auth}
         element={<AuthentificationPage />}
         loader={authentificationPageLoader}
-      />
+      >
+        <Route index element={<SignInPage />} />
+        <Route path="signup" element={<SignUpPage />} />
+      </Route>
     </Route>
   )
 );

@@ -1,20 +1,15 @@
-import { FunctionComponent, useEffect, useMemo } from "react";
-import { Col, Container, Row } from "react-bootstrap";
-import SignInForm from "../../components/authComponents/signInForm/signInForm.component";
-import SignUpForm from "../../components/authComponents/signUpForm/signUpForm.component";
+import { FunctionComponent } from "react";
 import {
   LoaderFunction,
   Navigate,
+  Outlet,
   defer,
-  redirect,
   useLoaderData,
-  useLocation,
-  useSearchParams,
 } from "react-router-dom";
-import { auth } from "../../utils/firebase";
-import { getUser, useUserContext } from "../../utils/utils";
+import { getUser } from "../../utils/utils";
 import { User } from "firebase/auth";
 import SuspenseWrapper from "../../utils/components/suspenseWrapper";
+import { Grid, Paper } from "@mui/material";
 
 interface SignUpPageProps {}
 
@@ -24,7 +19,6 @@ export const authentificationPageLoader: LoaderFunction = async () => {
 };
 
 const AuthentificationPage: FunctionComponent<SignUpPageProps> = () => {
-  const location = useLocation();
   const { userPromise } = useLoaderData() as {
     userPromise: Promise<User | null>;
   };
@@ -36,18 +30,36 @@ const AuthentificationPage: FunctionComponent<SignUpPageProps> = () => {
         user ? (
           <Navigate to="/" />
         ) : (
-          <Container>
-            <Row>
-              <Col className="mt-5">
-                <h1 className="text-center">Sign In</h1>
-                <SignInForm from={location.state?.from || "/"} />
-              </Col>
-              <Col className="mt-5">
-                <h1 className="text-center">Sign Up</h1>
-                <SignUpForm from={location.state?.from || "/"} />
-              </Col>
-            </Row>
-          </Container>
+          <Grid container component="main" sx={{ height: "100vh" }}>
+            <Grid
+              item
+              xs={false}
+              sm={4}
+              md={7}
+              sx={{
+                backgroundImage:
+                  "url(https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80)",
+                backgroundRepeat: "no-repeat",
+                backgroundColor: (t) =>
+                  t.palette.mode === "light"
+                    ? t.palette.grey[50]
+                    : t.palette.grey[900],
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            />
+            <Grid
+              item
+              xs={12}
+              sm={8}
+              md={5}
+              component={Paper}
+              elevation={6}
+              square
+            >
+              <Outlet />
+            </Grid>
+          </Grid>
         )
       }
     />

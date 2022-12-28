@@ -11,7 +11,7 @@ interface BookPageDataProps {
 const BookPageData: FunctionComponent<BookPageDataProps> = ({ book }) => {
   const navigate = useNavigate();
   const { currentUser } = useUserContext();
-  const { title, author, description, price, id, userId, imageURLL } = book;
+  const { title, author, description, price, id, userRef, imageURLL } = book;
 
   const handleDelete: React.MouseEventHandler<HTMLButtonElement> = async (
     event
@@ -57,7 +57,7 @@ const BookPageData: FunctionComponent<BookPageDataProps> = ({ book }) => {
               >
                 Add to cart
               </Button>
-              {currentUser?.uid === book.userId ? (
+              {currentUser?.uid === userRef.id ? (
                 <Col>
                   <Button
                     variant="danger"
