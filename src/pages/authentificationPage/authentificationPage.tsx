@@ -14,7 +14,7 @@ import {
 import { auth } from "../../utils/firebase";
 import { getUser, useUserContext } from "../../utils/utils";
 import { User } from "firebase/auth";
-import SuspenseWrapper from "../../utils/suspenseWrapper";
+import SuspenseWrapper from "../../utils/components/suspenseWrapper";
 
 interface SignUpPageProps {}
 

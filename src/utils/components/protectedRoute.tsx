@@ -9,7 +9,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { User } from "firebase/auth";
-import { getUser } from "./utils";
+import { getUser } from "../utils";
 import { Spinner } from "react-bootstrap";
 
 interface PrivateRouteProps {}

@@ -4,7 +4,7 @@ import BookList from "../../components/bookComponents/booklist/booklist.componen
 import { Await, LoaderFunction, defer, useLoaderData } from "react-router-dom";
 import { BookModel } from "../../api/models/book.model";
 import { getBooks } from "../../api/BookAPI";
-import SuspenseWrapper from "../../utils/suspenseWrapper";
+import SuspenseWrapper from "../../utils/components/suspenseWrapper";
 
 interface BooksPageProps {}
 
