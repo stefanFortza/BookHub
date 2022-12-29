@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import { BookModel } from "../../../api/models/book.model";
-import { Paper, Stack, styled } from "@mui/material";
+import { Box, Paper, Stack, Typography, styled } from "@mui/material";
 
 interface FiltersProps {
   setFilters: React.Dispatch<React.SetStateAction<string>>;
@@ -17,8 +17,10 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const Filters: FunctionComponent<FiltersProps> = ({ setFilters, books }) => {
   return (
-    <div>
-      <h1>Filters</h1>
+    <Box>
+      <Typography variant="body1" gutterBottom sx={{ fontSize: "2rem" }}>
+        Authors
+      </Typography>
       <div
         onClick={(e) => {
           setFilters(e.currentTarget.innerText.toLowerCase());
@@ -42,7 +44,7 @@ const Filters: FunctionComponent<FiltersProps> = ({ setFilters, books }) => {
             </Item>
           ))}
       </Stack>
-    </div>
+    </Box>
   );
 };
 

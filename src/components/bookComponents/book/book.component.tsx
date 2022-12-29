@@ -1,9 +1,15 @@
 import { FunctionComponent } from "react";
 import { Link } from "react-router-dom";
 import { BookModel } from "../../../api/models/book.model";
-import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  CardProps,
+  Typography,
+} from "@mui/material";
 
-interface BookProps extends React.HTMLAttributes<HTMLElement> {
+interface BookProps extends CardProps {
   book: BookModel;
 }
 
@@ -17,7 +23,9 @@ const Book: FunctionComponent<BookProps> = ({ book, ...other }) => {
           component="img"
           height=""
           image={imageURLL}
-          // src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80"
+          sx={{
+            height: "300px",
+          }}
         />
       </Link>
       <CardContent>

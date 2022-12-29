@@ -19,7 +19,7 @@ export const getUser = () => {
       resolve(user);
     });
     unsubscribe();
-    // }, 1000);
+    // }, 2000);
   });
 };
 
@@ -40,3 +40,10 @@ export const signInWithFacebook = async (
     }
   }
 };
+
+export function capitalizeFirstLetter(string: string | undefined) {
+  if (string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+  return "";
+}

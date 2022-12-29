@@ -4,7 +4,7 @@ import { Await, LoaderFunction, defer, useLoaderData } from "react-router-dom";
 import { BookModel } from "../../api/models/book.model";
 import { getBooks } from "../../api/BookAPI";
 import SuspenseWrapper from "../../utils/components/suspenseWrapper";
-import { Box, Container, Grid } from "@mui/material";
+import { Box, Container, Grid, Skeleton } from "@mui/material";
 
 interface BooksPageProps {}
 
@@ -21,8 +21,11 @@ const BooksPage: FunctionComponent<BooksPageProps> = () => {
   return (
     <SuspenseWrapper
       resolve={booksPromise}
+      loadingComponent={
+        <Skeleton variant="rectangular" width={1000} height={500} />
+      }
       children={(books) => (
-        <Container disableGutters>
+        <Container>
           <Box mt={5}>
             <BookList books={books} />
           </Box>

@@ -20,6 +20,7 @@ import ProtectedRoute, {
 import SignInPage from "../components/authComponents/signInPage/signInPage";
 import SignUpPage from "../components/authComponents/signUpPage/signUpPage";
 import HomePage from "../pages/homePage/homePage";
+import CategoryBookPage from "../pages/categoryBookPage/categoryBookPage";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -39,6 +40,12 @@ export const router = createBrowserRouter(
               path={PageNames.ShowBook}
               element={<ShowBookPage />}
               loader={showBookPageLoader}
+            />
+
+            <Route
+              path={"category/:category"}
+              element={<CategoryBookPage />}
+              // loader={showBookPageLoader}
             />
           </Route>
         </Route>

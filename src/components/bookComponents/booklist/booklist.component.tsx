@@ -1,10 +1,8 @@
-import { FunctionComponent, useEffect, useState } from "react";
-import { Col, Row } from "react-bootstrap";
+import { FunctionComponent, useState } from "react";
 import Book from "../book/book.component";
 import Filters from "../filters/filters.component";
 import { BookModel } from "../../../api/models/book.model";
-import { getAllBooks, getBooks } from "../../../api/BookAPI";
-import { Box, Grid, Paper, styled } from "@mui/material";
+import { Grid, Paper, styled } from "@mui/material";
 
 interface BookListProps {
   books: BookModel[];
@@ -23,25 +21,30 @@ const BookList: FunctionComponent<BookListProps> = ({ books }) => {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={2}>
+      <Grid item sx={{ display: { xs: "none", md: "block" } }} md={2}>
         <Item>
           <Filters setFilters={setFilters} books={books} />
         </Item>
       </Grid>
-      <Grid item xs={10} container spacing={4}>
-        {books.length &&
+      <Grid item xs={12} md={10} container spacing={4}>
+        {books.length ? (
           books
             .filter(
               (book) =>
                 book.author.toLowerCase() === filters || filters === "all"
             )
             .map((book) => (
-              <Grid key={book.id} xs={4} item>
+              <Grid key={book.id} xs={12} md={6} lg={4} item>
                 {/* <Item> */}
                 <Book book={book} />
                 {/* </Item> */}
               </Grid>
-            ))}
+            ))
+        ) : (
+          <Grid xs={12} item>
+            "No books for this category"
+          </Grid>
+        )}
       </Grid>
     </Grid>
   );

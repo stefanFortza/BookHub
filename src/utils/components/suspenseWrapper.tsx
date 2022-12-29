@@ -10,15 +10,17 @@ interface SuspenseWrapperProps<T> {
         (data: Awaited<T>): React.ReactElement;
       };
   errorElement?: React.ReactNode;
+  loadingComponent?: React.ReactNode;
 }
 
 const SuspenseWrapper = <T,>({
   resolve,
   children,
   errorElement,
+  loadingComponent = <Spinner />,
 }: SuspenseWrapperProps<T>) => {
   return (
-    <Suspense fallback={<Spinner />}>
+    <Suspense fallback={loadingComponent}>
       <Await
         resolve={resolve}
         children={children}
