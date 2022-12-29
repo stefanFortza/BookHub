@@ -1,10 +1,10 @@
 import { FunctionComponent, Suspense } from "react";
-import { Container, Spinner } from "react-bootstrap";
 import BookList from "../../components/bookComponents/booklist/booklist.component";
 import { Await, LoaderFunction, defer, useLoaderData } from "react-router-dom";
 import { BookModel } from "../../api/models/book.model";
 import { getBooks } from "../../api/BookAPI";
 import SuspenseWrapper from "../../utils/components/suspenseWrapper";
+import { Box, Container, Grid } from "@mui/material";
 
 interface BooksPageProps {}
 
@@ -22,8 +22,10 @@ const BooksPage: FunctionComponent<BooksPageProps> = () => {
     <SuspenseWrapper
       resolve={booksPromise}
       children={(books) => (
-        <Container className="mx-4">
-          <BookList books={books} />
+        <Container disableGutters>
+          <Box mt={5}>
+            <BookList books={books} />
+          </Box>
         </Container>
       )}
     />

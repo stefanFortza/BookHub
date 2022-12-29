@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import "firebase/auth";
 import { connectAuthEmulator, getAuth } from "firebase/auth";
 import "firebase/firestore";
+import { GoogleAuthProvider } from "firebase/auth";
 import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
 
@@ -14,11 +15,13 @@ const firebaseConfig = {
   messagingSenderId: "851158701509",
   appId: "1:851158701509:web:e7cd4b4039b8590bf627ac",
 };
+
 const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
+const googleProvider = new GoogleAuthProvider();
 
 if (location.hostname === "localhost") {
   connectFirestoreEmulator(db, "localhost", 8080);
@@ -26,4 +29,4 @@ if (location.hostname === "localhost") {
   connectStorageEmulator(storage, "localhost", 9199);
 }
 
-export { db, auth, storage };
+export { db, auth, storage, googleProvider };

@@ -4,11 +4,13 @@ import {
   User,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendEmailVerification,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   updateProfile,
 } from "firebase/auth";
-import { auth, db } from "../utils/firebase";
+import { auth, db, googleProvider } from "../utils/firebase";
 import { DocumentReference, doc, getDoc, setDoc } from "firebase/firestore";
 import { UserModel } from "./models/user.model";
 
@@ -30,7 +32,14 @@ export async function signUpUserWithEmailAndPassword(
     id: user.uid,
   });
 
-  return auth.currentUser;
+  // await sendEmailVerification(user);
+
+  return user;
+}
+export async function signInWithGooglePopUp() {
+  const userCredentials = await signInWithPopup(auth, googleProvider);
+  console.log(userCredentials);
+  return userCredentials;
 }
 
 export async function signInUserWithEmailAndPassword(

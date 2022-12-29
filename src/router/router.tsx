@@ -17,8 +17,8 @@ import { PageNames } from "../pages/navigation/pagesNames";
 import ProtectedRoute, {
   protectedRouteLoader,
 } from "../utils/components/protectedRoute";
-import SignInPage from "../pages/signInPage/signInPage";
-import SignUpPage from "../pages/signUpPage/signUpPage";
+import SignInPage from "../components/authComponents/signInPage/signInPage";
+import SignUpPage from "../components/authComponents/signUpPage/signUpPage";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(

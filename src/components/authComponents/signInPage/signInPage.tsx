@@ -6,31 +6,31 @@ import {
   TextField,
   Link,
   Button,
+  ButtonGroup,
 } from "@mui/material";
+import { AuthErrorCodes } from "firebase/auth";
 import { useFormik } from "formik";
 import { FunctionComponent } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   signInUserWithEmailAndPassword,
-  signUpUserWithEmailAndPassword,
-} from "../../api/AuthAPI";
+  signInWithGooglePopUp,
+} from "../../../api/AuthAPI";
 import * as yup from "yup";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { FirebaseError } from "firebase/app";
+import { ReactComponent as GoogleIcon } from "../../../assets/google.svg";
 
 interface SignInPageProps {}
 
-const initialSignUpFormValues = {
+const initialSignInFormValues = {
   email: "",
   password: "",
-  displayName: "",
-  confirmPassword: "",
 };
 
-const signUpFormSchema = yup.object({
+const signInFormSchema = yup.object({
   email: yup.string().email().required(),
-  displayName: yup.string().min(3).required(),
-  password: yup.string().min(3).required(),
-  confirmPassword: yup.string().min(3).required(),
+  password: yup.string().required().min(6),
 });
 
 function Copyright(props: any) {
@@ -51,24 +51,34 @@ function Copyright(props: any) {
   );
 }
 
-const SignUpPage: FunctionComponent<SignInPageProps> = () => {
+const SignInPage: FunctionComponent<SignInPageProps> = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
   const formik = useFormik({
-    initialValues: initialSignUpFormValues,
-    validationSchema: signUpFormSchema,
-    onSubmit: async (values, { setSubmitting, setFieldError }) => {
-      setSubmitting(false);
-      const user = await signUpUserWithEmailAndPassword(
-        values.email,
-        values.password,
-        values.displayName
-      );
-
-      navigate(0);
+    initialValues: initialSignInFormValues,
+    validationSchema: signInFormSchema,
+    onSubmit: async (values, { setSubmitting, submitForm, setFieldError }) => {
+      try {
+        console.log(values);
+        await signInUserWithEmailAndPassword(values.email, values.password);
+        navigate("/");
+      } catch (e) {
+        console.log(e);
+        const error = e as FirebaseError;
+        if (error.code === AuthErrorCodes.USER_DELETED) {
+          setFieldError("email", "email not found");
+        } else if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
+          setFieldError("password", "wrong password");
+        }
+      }
     },
   });
+
+  const signInWithGooglePopUpRefresh = async () => {
+    await signInWithGooglePopUp();
+    navigate("/");
+  };
 
   const { errors, touched, handleChange, values, handleBlur, handleSubmit } =
     formik;
@@ -88,7 +98,7 @@ const SignUpPage: FunctionComponent<SignInPageProps> = () => {
       </Avatar>
 
       <Typography component="h1" variant="h5">
-        Sign up
+        Sign in
       </Typography>
       <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
         <TextField
@@ -110,21 +120,6 @@ const SignUpPage: FunctionComponent<SignInPageProps> = () => {
           margin="normal"
           required
           fullWidth
-          name="displayName"
-          label="Display Name"
-          type="text"
-          id="displayName"
-          autoComplete="displayName"
-          value={values.displayName}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          error={touched.displayName && !!errors.displayName}
-          helperText={touched.displayName && errors.displayName}
-        />
-        <TextField
-          margin="normal"
-          required
-          fullWidth
           name="password"
           label="Password"
           type="password"
@@ -136,30 +131,46 @@ const SignUpPage: FunctionComponent<SignInPageProps> = () => {
           error={touched.password && !!errors.password}
           helperText={touched.password && errors.password}
         />
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          name="confirmPassword"
-          label="Confirm Password"
-          type="password"
-          id="confirmPassword"
-          autoComplete="current-password"
-          value={values.confirmPassword}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          error={touched.confirmPassword && !!errors.confirmPassword}
-          helperText={touched.confirmPassword && errors.confirmPassword}
-        />
-
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
+        <Box
+          sx={{
+            display: "flex",
+            "& > *": {
+              m: 1,
+            },
+          }}
         >
-          Sign Up
-        </Button>
+          <ButtonGroup
+            orientation="vertical"
+            aria-label="vertical contained button group"
+            variant="contained"
+            fullWidth
+          >
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ p: 2, fontSize: 18 }}
+            >
+              Sign In
+            </Button>
+            <Button
+              type="button"
+              fullWidth
+              variant="contained"
+              sx={{
+                backgroundColor: "white",
+                mt: 2,
+                p: 1,
+                fontSize: 18,
+                color: "black",
+              }}
+              onClick={signInWithGooglePopUpRefresh}
+            >
+              <GoogleIcon />
+              Sign In With Google
+            </Button>
+          </ButtonGroup>
+        </Box>
 
         <Grid container>
           <Grid item xs>
@@ -170,10 +181,10 @@ const SignUpPage: FunctionComponent<SignInPageProps> = () => {
           <Grid item>
             <Link
               style={{ cursor: "pointer" }}
-              onClick={() => navigate("/auth")}
+              onClick={() => navigate("/auth/signup")}
               variant="body2"
             >
-              {"Have an account? Sign In"}
+              {"Don't have an account? Sign Up"}
             </Link>
           </Grid>
         </Grid>
@@ -183,4 +194,4 @@ const SignUpPage: FunctionComponent<SignInPageProps> = () => {
   );
 };
 
-export default SignUpPage;
+export default SignInPage;

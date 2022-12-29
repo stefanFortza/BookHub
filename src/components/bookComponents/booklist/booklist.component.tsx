@@ -4,35 +4,46 @@ import Book from "../book/book.component";
 import Filters from "../filters/filters.component";
 import { BookModel } from "../../../api/models/book.model";
 import { getAllBooks, getBooks } from "../../../api/BookAPI";
+import { Box, Grid, Paper, styled } from "@mui/material";
 
 interface BookListProps {
   books: BookModel[];
 }
 
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+}));
+
 const BookList: FunctionComponent<BookListProps> = ({ books }) => {
   const [filters, setFilters] = useState("all");
 
   return (
-    <Row xs={1} md={2} className="g-4 mt-4">
-      <Col md={2}>
-        <Filters setFilters={setFilters} books={books} />
-      </Col>
-      <Col md={10}>
-        <Row xs={1} md={3} lg={4} xl={5} className="g-4">
-          {books.length &&
-            books
-              .filter(
-                (book) =>
-                  book.author.toLowerCase() === filters || filters === "all"
-              )
-              .map((book) => (
-                <Col key={book.id} md={4}>
-                  <Book book={book} />
-                </Col>
-              ))}
-        </Row>
-      </Col>
-    </Row>
+    <Grid container spacing={2}>
+      <Grid item xs={2}>
+        <Item>
+          <Filters setFilters={setFilters} books={books} />
+        </Item>
+      </Grid>
+      <Grid item xs={10} container spacing={4}>
+        {books.length &&
+          books
+            .filter(
+              (book) =>
+                book.author.toLowerCase() === filters || filters === "all"
+            )
+            .map((book) => (
+              <Grid key={book.id} xs={4} item>
+                {/* <Item> */}
+                <Book book={book} />
+                {/* </Item> */}
+              </Grid>
+            ))}
+      </Grid>
+    </Grid>
   );
 };
 
