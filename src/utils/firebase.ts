@@ -1,6 +1,10 @@
 import { initializeApp } from "firebase/app";
 import "firebase/auth";
-import { connectAuthEmulator, getAuth } from "firebase/auth";
+import {
+  FacebookAuthProvider,
+  connectAuthEmulator,
+  getAuth,
+} from "firebase/auth";
 import "firebase/firestore";
 import { GoogleAuthProvider } from "firebase/auth";
 import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
@@ -22,6 +26,7 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 const googleProvider = new GoogleAuthProvider();
+const facebookProvider = new FacebookAuthProvider();
 
 if (location.hostname === "localhost") {
   connectFirestoreEmulator(db, "localhost", 8080);
@@ -29,4 +34,4 @@ if (location.hostname === "localhost") {
   connectStorageEmulator(storage, "localhost", 9199);
 }
 
-export { db, auth, storage, googleProvider };
+export { db, auth, storage, googleProvider, facebookProvider };

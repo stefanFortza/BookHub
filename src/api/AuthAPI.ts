@@ -10,7 +10,7 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
-import { auth, db, googleProvider } from "../utils/firebase";
+import { auth, db, facebookProvider, googleProvider } from "../utils/firebase";
 import { DocumentReference, doc, getDoc, setDoc } from "firebase/firestore";
 import { UserModel } from "./models/user.model";
 
@@ -38,6 +38,11 @@ export async function signUpUserWithEmailAndPassword(
 }
 export async function signInWithGooglePopUp() {
   const userCredentials = await signInWithPopup(auth, googleProvider);
+  console.log(userCredentials);
+  return userCredentials;
+}
+export async function signInWithFacebookPopUp() {
+  const userCredentials = await signInWithPopup(auth, facebookProvider);
   console.log(userCredentials);
   return userCredentials;
 }

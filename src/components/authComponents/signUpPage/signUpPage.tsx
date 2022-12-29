@@ -12,6 +12,7 @@ import { useFormik } from "formik";
 import { FunctionComponent } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
+  signInWithFacebookPopUp,
   signInWithGooglePopUp,
   signUpUserWithEmailAndPassword,
 } from "../../../api/AuthAPI";
@@ -19,6 +20,7 @@ import * as yup from "yup";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { FirebaseError } from "firebase/app";
 import { ReactComponent as GoogleIcon } from "../../../assets/google.svg";
+import FacebookIcon from "@mui/icons-material/Facebook";
 
 interface SignInPageProps {}
 
@@ -83,8 +85,13 @@ const SignUpPage: FunctionComponent<SignInPageProps> = () => {
   const { errors, touched, handleChange, values, handleBlur, handleSubmit } =
     formik;
 
-  const signInWithGooglePopUpRefresh = async () => {
+  const signInWithGoogle = async () => {
     await signInWithGooglePopUp();
+    navigate("/");
+  };
+
+  const signInWithFacebook = async () => {
+    await signInWithFacebookPopUp();
     navigate("/");
   };
 
@@ -200,10 +207,26 @@ const SignUpPage: FunctionComponent<SignInPageProps> = () => {
                 fontSize: 18,
                 color: "black",
               }}
-              onClick={signInWithGooglePopUpRefresh}
+              onClick={signInWithGoogle}
             >
               <GoogleIcon />
               Sign In With Google
+            </Button>
+            <Button
+              type="button"
+              fullWidth
+              variant="contained"
+              sx={{
+                backgroundColor: "lightblue",
+                mt: 2,
+                p: 1,
+                fontSize: 18,
+                color: "black",
+              }}
+              onClick={signInWithFacebook}
+            >
+              <FacebookIcon style={{ fontSize: 50 }} />
+              Sign In With Facebook
             </Button>
           </ButtonGroup>
         </Box>
