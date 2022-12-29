@@ -19,13 +19,14 @@ import ProtectedRoute, {
 } from "../utils/components/protectedRoute";
 import SignInPage from "../components/authComponents/signInPage/signInPage";
 import SignUpPage from "../components/authComponents/signUpPage/signUpPage";
+import HomePage from "../pages/homePage/homePage";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route element={<ProtectedRoute />} loader={protectedRouteLoader}>
         <Route path={PageNames.Root} element={<Navigation />}>
-          <Route index element={<div>Home Page</div>} />
+          <Route index element={<HomePage />} />
 
           <Route path={PageNames.Books}>
             <Route index element={<BooksPage />} loader={booksPageLoader} />

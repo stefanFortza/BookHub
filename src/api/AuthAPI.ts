@@ -3,6 +3,7 @@ import {
   NextOrObserver,
   User,
   createUserWithEmailAndPassword,
+  linkWithPopup,
   onAuthStateChanged,
   sendEmailVerification,
   signInWithEmailAndPassword,

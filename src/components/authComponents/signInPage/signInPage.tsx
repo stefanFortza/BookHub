@@ -8,7 +8,14 @@ import {
   Button,
   ButtonGroup,
 } from "@mui/material";
-import { AuthErrorCodes } from "firebase/auth";
+import {
+  AuthErrorCodes,
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  fetchSignInMethodsForEmail,
+  linkWithCredential,
+  signInWithCredential,
+} from "firebase/auth";
 import { useFormik } from "formik";
 import { FunctionComponent } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -22,6 +29,8 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { FirebaseError } from "firebase/app";
 import { ReactComponent as GoogleIcon } from "../../../assets/google.svg";
 import FacebookIcon from "@mui/icons-material/Facebook";
+import { auth } from "../../../utils/firebase";
+import { signInWithFacebook } from "../../../utils/utils";
 
 interface SignInPageProps {}
 
@@ -82,13 +91,15 @@ const SignInPage: FunctionComponent<SignInPageProps> = () => {
     navigate("/");
   };
 
-  const signInWithFacebook = async () => {
-    await signInWithFacebookPopUp();
-    navigate("/");
-  };
-
-  const { errors, touched, handleChange, values, handleBlur, handleSubmit } =
-    formik;
+  const {
+    errors,
+    touched,
+    handleChange,
+    values,
+    handleBlur,
+    handleSubmit,
+    setFieldError,
+  } = formik;
 
   return (
     <Box
@@ -187,7 +198,7 @@ const SignInPage: FunctionComponent<SignInPageProps> = () => {
                 fontSize: 18,
                 color: "black",
               }}
-              onClick={signInWithFacebook}
+              onClick={() => signInWithFacebook(navigate, setFieldError)}
             >
               <FacebookIcon style={{ fontSize: 50 }} />
               Sign In With Facebook

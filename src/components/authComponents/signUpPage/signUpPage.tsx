@@ -21,6 +21,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { FirebaseError } from "firebase/app";
 import { ReactComponent as GoogleIcon } from "../../../assets/google.svg";
 import FacebookIcon from "@mui/icons-material/Facebook";
+import { AuthErrorCodes } from "firebase/auth";
+import { auth } from "../../../utils/firebase";
+import { signInWithFacebook } from "../../../utils/utils";
 
 interface SignInPageProps {}
 
@@ -82,16 +85,18 @@ const SignUpPage: FunctionComponent<SignInPageProps> = () => {
     },
   });
 
-  const { errors, touched, handleChange, values, handleBlur, handleSubmit } =
-    formik;
+  const {
+    errors,
+    touched,
+    handleChange,
+    values,
+    handleBlur,
+    handleSubmit,
+    setFieldError,
+  } = formik;
 
   const signInWithGoogle = async () => {
     await signInWithGooglePopUp();
-    navigate("/");
-  };
-
-  const signInWithFacebook = async () => {
-    await signInWithFacebookPopUp();
     navigate("/");
   };
 
@@ -223,7 +228,7 @@ const SignUpPage: FunctionComponent<SignInPageProps> = () => {
                 fontSize: 18,
                 color: "black",
               }}
-              onClick={signInWithFacebook}
+              onClick={() => signInWithFacebook(navigate, setFieldError)}
             >
               <FacebookIcon style={{ fontSize: 50 }} />
               Sign In With Facebook
