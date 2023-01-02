@@ -5,6 +5,7 @@ import { UserModel } from "./user.model";
 export interface IComment {
   comment: string;
   rating: number;
+  title: string;
 }
 
 export interface CommentModel extends IComment {

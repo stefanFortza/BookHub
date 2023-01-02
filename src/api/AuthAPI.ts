@@ -48,7 +48,7 @@ export async function signInWithFacebookPopUp() {
 }
 
 export async function createFirestoreUser(user: User) {
-  const { uid, displayName, email } = user;
+  const { uid, displayName, email, photoURL } = user;
   const userRef = doc(db, "users", uid) as DocumentReference<UserModel>;
   const userDoc = await getDoc(userRef);
   if (!userDoc.exists()) {
@@ -58,6 +58,7 @@ export async function createFirestoreUser(user: User) {
       wishListRef: [],
       displayName,
       email,
+      photoURL,
       id: uid,
     });
   }

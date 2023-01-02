@@ -3,7 +3,7 @@ import { BookModel } from "../../../api/models/book.model";
 import CommentComponent from "../commentComponent/commentComponent.component";
 import { CommentModel } from "../../../api/models/coment.model";
 import { getAllComments } from "../../../api/CommentAPI";
-import { LoaderFunctionArgs } from "react-router-dom";
+import { Box } from "@mui/material";
 
 interface CommentListProps {
   currentBook: BookModel;
@@ -18,12 +18,12 @@ const CommentList: FunctionComponent<CommentListProps> = ({ currentBook }) => {
   }, []);
 
   return (
-    <div>
-      {comments.length &&
+    <Box sx={{ mt: 3 }}>
+      {!!comments.length &&
         comments.map((comment) => (
           <CommentComponent key={comment.id} comment={comment} />
         ))}
-    </div>
+    </Box>
   );
 };
 

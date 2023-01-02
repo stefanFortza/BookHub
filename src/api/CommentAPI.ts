@@ -1,35 +1,37 @@
 import {
-  CollectionReference,
   DocumentReference,
   arrayUnion,
-  collection,
   doc,
   getDoc,
-  getDocs,
-  query,
+  increment,
   setDoc,
   updateDoc,
-  where,
 } from "firebase/firestore";
-import { BookModel } from "./models/book.model";
 import { db } from "../utils/firebase";
 import { CommentModel, IComment } from "./models/coment.model";
 import { uuidv4 } from "@firebase/util";
 import { getBookDocRef } from "./BookAPI";
 import { getUserDocRef } from "./AuthAPI";
+import { BookModel } from "./models/book.model";
 
 export async function addComment(
   comment: IComment,
-  bookId: string,
+  book: BookModel,
   userId: string
 ) {
   const id = uuidv4();
-  const bookRef = getBookDocRef(bookId);
+  const bookRef = getBookDocRef(book.id);
   const commentRef = getCommentDocRef(id);
   const userRef = getUserDocRef(userId);
 
+  const newRating =
+    (book.ratingAvg * book.ratingCount + comment.rating) /
+    (book.ratingCount + 1);
+
   await updateDoc(bookRef, {
     commentsRef: arrayUnion(commentRef),
+    ratingAvg: newRating,
+    ratingCount: increment(1),
   });
 
   await setDoc(commentRef, { ...comment, id, userRef });

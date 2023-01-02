@@ -1,4 +1,4 @@
-import { Paper, Box, Grid, styled } from "@mui/material";
+import { Paper, Box, Grid, styled, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 import { Container } from "react-bootstrap";
 import { LoaderFunction, useLoaderData } from "react-router-dom";
@@ -30,7 +30,7 @@ export const showBookPageLoader: LoaderFunction = async ({ params }) => {
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
-  padding: theme.spacing(1),
+  padding: theme.spacing(2),
   textAlign: "center",
   color: theme.palette.text.secondary,
 }));
@@ -47,20 +47,28 @@ const ShowBookPage: FunctionComponent<BookProps> = () => {
           <span className="visually-hidden">Loading...</span>
         </Spinner> */}
 
-      <h1 className="text-center mt-5">De la acelasi autor:</h1>
-      <h1 className="text-center mt-5">Comments Section</h1>
+      {/* <h1 className="text-center mt-5">De la acelasi autor:</h1> */}
+      {/* <h1 className="text-center mt-5">Comments Section</h1> */}
 
       <Box sx={{ flexGrow: 1, mt: 5 }}>
         <Grid container spacing={2}>
-          <Grid xs={8} item>
-            <Item sx={{ minHeight: "100%" }}>{currentBook.description}</Item>
-          </Grid>
-          <Grid xs={4} item>
-            <Item>
-              {currentBook && <CommentForm bookId={currentBook.id} />}
+          <Grid xs={8} item mb={3}>
+            <Item sx={{ minHeight: "100%", fontSize: 18 }}>
+              <Typography
+                component="h3"
+                variant="h3"
+                mb={2}
+                sx={{ textAlign: "left" }}
+              >
+                Description:
+              </Typography>
+              {currentBook.description || "No description"}
             </Item>
           </Grid>
-        </Grid>{" "}
+          <Grid xs={4} item>
+            <Item>{currentBook && <CommentForm book={currentBook} />}</Item>
+          </Grid>
+        </Grid>
       </Box>
 
       {currentBook && <CommentList currentBook={currentBook} />}
