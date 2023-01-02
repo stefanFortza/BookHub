@@ -3,6 +3,7 @@ import { UserModel } from "./user.model";
 import { CommentModel } from "./coment.model";
 
 export interface IBook {
+  isbn: string;
   title: string;
   author: string;
   yearOfPublication: string;
@@ -12,10 +13,10 @@ export interface IBook {
   imageURLL: string;
   price: number;
   description: string;
+  ratingCount: number;
+  ratingAvg: number;
 }
 export interface BookModel extends IBook {
   id: string;
-  // rating?: number;
-  userRef: DocumentReference<UserModel>;
   commentsRef: DocumentReference<CommentModel>[];
 }

@@ -1,9 +1,15 @@
 import { createContext, FunctionComponent, useState, useEffect } from "react";
 import { User, UserCredential } from "firebase/auth";
-import { onAuthStateChangedListner } from "../../api/AuthAPI";
+import {
+  getUserData,
+  getUserDocRef,
+  onAuthStateChangedListner,
+} from "../../api/AuthAPI";
+import { UserModel } from "../../api/models/user.model";
 
 interface IUserContext {
   currentUser: User | null;
+  userData: UserModel | null;
 }
 
 interface UserContextProviderProps {
@@ -12,23 +18,32 @@ interface UserContextProviderProps {
 
 export const UserContext = createContext<IUserContext>({
   currentUser: null,
+  userData: null,
 });
 
 const UserContextProvider: FunctionComponent<UserContextProviderProps> = (
   props
 ) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUserData, setCurrentUserData] = useState<UserModel | null>(
+    null
+  );
 
   useEffect(() => {
     const unsubscribe = onAuthStateChangedListner((user) => {
-      setCurrentUser(user);
+      if (user) {
+        getUserData(getUserDocRef(user.uid)).then((userData) => {
+          userData ? setCurrentUserData(userData) : setCurrentUserData(null);
+          setCurrentUser(user);
+        });
+      }
     });
 
     return unsubscribe;
   }, []);
 
   return (
-    <UserContext.Provider value={{ currentUser }}>
+    <UserContext.Provider value={{ currentUser, userData: currentUserData }}>
       {props.children}
     </UserContext.Provider>
   );

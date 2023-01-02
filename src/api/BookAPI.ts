@@ -10,22 +10,22 @@ import {
   query,
   setDoc,
   updateDoc,
+  arrayRemove,
 } from "firebase/firestore";
 import { BookModel, IBook } from "./models/book.model";
 import { db } from "../utils/firebase";
 import { uuidv4 } from "@firebase/util";
 import { UserModel } from "./models/user.model";
-import { CommentModel } from "./models/coment.model";
+import { getUserData, getUserDocRef } from "./AuthAPI";
+import { getUser } from "../utils/utils";
 
 export async function addBook(book: IBook, userId: string) {
   const id = uuidv4();
-  const userRef = doc(db, "users", userId) as DocumentReference<UserModel>;
   await setDoc<BookModel>(
     doc(db, "books", id) as DocumentReference<BookModel>,
     {
       ...book,
       id,
-      userRef,
       commentsRef: [],
     }
   );
@@ -62,4 +62,40 @@ export async function getBooks(start: number) {
     books.push({ ...book.data() });
   });
   return books;
+}
+
+export async function addBookToWishList(bookId: string, userId: string) {
+  const bookRef = getBookDocRef(bookId);
+  const userRef = getUserDocRef(userId);
+  const user = await getUserData(userRef);
+
+  if (user) {
+    user.wishListRef.forEach((book) => {
+      if (book.id === bookId) {
+        return;
+      }
+    });
+
+    await updateDoc(userRef, {
+      wishListRef: arrayUnion(bookRef),
+    });
+  }
+}
+
+export async function removeBookFromWishList(bookId: string, userId: string) {
+  const bookRef = getBookDocRef(bookId);
+  const userRef = getUserDocRef(userId);
+  const user = await getUserData(userRef);
+
+  if (user) {
+    for (let i = 0; i < user.wishListRef.length; i++) {
+      const book = user.wishListRef[i];
+
+      if (book.id === bookId) {
+        await updateDoc(userRef, {
+          wishListRef: arrayRemove(bookRef),
+        });
+      }
+    }
+  }
 }

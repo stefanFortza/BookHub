@@ -32,21 +32,7 @@ const BooksPage: FunctionComponent<BooksPageProps> = () => {
         </Container>
       )}
     />
-    // <Suspense fallback={<Spinner />}>
-    //   <Await resolve={booksPromise}>
-    //     {(books) => (
-    //       <Container className="mx-4">
-    //         <BookList books={books} />
-    //       </Container>
-    //     )}
-    //   </Await>
-    // </Suspense>
   );
-  // return (
-  //   <Container className="mx-4">
-  //     <BookList books={books} />
-  //   </Container>
-  // );
 };
 
 export default BooksPage;

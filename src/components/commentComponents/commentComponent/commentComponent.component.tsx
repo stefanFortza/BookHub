@@ -2,6 +2,7 @@ import { FunctionComponent, useEffect, useMemo, useState } from "react";
 import { CommentModel } from "../../../api/models/coment.model";
 import { UserModel } from "../../../api/models/user.model";
 import { getUserData } from "../../../api/AuthAPI";
+import { Rating, Typography } from "@mui/material";
 
 interface CommentProps {
   comment: CommentModel;
@@ -29,7 +30,8 @@ const CommentComponent: FunctionComponent<CommentProps> = ({ comment }) => {
     <div>
       <h2>{user ? user.displayName : ""}</h2>
       <div>{comment.comment}</div>
-      {ratingJSX}
+      <Typography component="legend">Read only</Typography>
+      <Rating name="read-only" value={comment.rating} readOnly />
     </div>
   );
 };

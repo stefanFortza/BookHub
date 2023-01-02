@@ -26,26 +26,41 @@ export async function signUpUserWithEmailAndPassword(
     displayName,
   });
 
-  const userRef = doc(db, "users", user.uid) as DocumentReference<UserModel>;
-  await setDoc(userRef, {
-    displayName: user.displayName,
-    email: user.email,
-    id: user.uid,
-  });
-
-  // await sendEmailVerification(user);
+  createFirestoreUser(user);
 
   return user;
 }
 export async function signInWithGooglePopUp() {
   const userCredentials = await signInWithPopup(auth, googleProvider);
+
+  await createFirestoreUser(userCredentials.user);
+
   console.log(userCredentials);
   return userCredentials;
 }
 export async function signInWithFacebookPopUp() {
   const userCredentials = await signInWithPopup(auth, facebookProvider);
+
+  await createFirestoreUser(userCredentials.user);
+
   console.log(userCredentials);
   return userCredentials;
+}
+
+export async function createFirestoreUser(user: User) {
+  const { uid, displayName, email } = user;
+  const userRef = doc(db, "users", uid) as DocumentReference<UserModel>;
+  const userDoc = await getDoc(userRef);
+  if (!userDoc.exists()) {
+    // await sendEmailVerification(user);
+
+    await setDoc(userRef, {
+      wishListRef: [],
+      displayName,
+      email,
+      id: uid,
+    });
+  }
 }
 
 export async function signInUserWithEmailAndPassword(

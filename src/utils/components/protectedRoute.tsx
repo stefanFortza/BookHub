@@ -23,7 +23,7 @@ const ProtectedRoute: FunctionComponent<PrivateRouteProps> = () => {
   const location = useLocation();
   const { user } = useLoaderData() as { user: Promise<User | null> };
 
-  console.log(user);
+  // console.log(user);
 
   return (
     <Suspense fallback={<Spinner />}>
