@@ -1,12 +1,13 @@
+import { Paper, Box, Grid, styled } from "@mui/material";
 import { FunctionComponent } from "react";
+import { Container } from "react-bootstrap";
 import { LoaderFunction, useLoaderData } from "react-router-dom";
-import BookData from "../../components/bookComponents/bookPageData/bookData.component";
+import { getBook } from "../../api/BookAPI";
+import { BookModel } from "../../api/models/book.model";
+import SearchWiki from "../../api/populate/searchWiki";
+import ShowBookPageHeader from "../../components/bookComponents/bookPageData/showBookPageHeader.component";
 import CommentForm from "../../components/commentComponents/commentForm/commentForm.component";
 import CommentList from "../../components/commentComponents/commentList/commentList.component";
-import { BookModel } from "../../api/models/book.model";
-import { getBook } from "../../api/BookAPI";
-import { Box, Container, Grid, Paper, styled } from "@mui/material";
-import SearchWiki from "../../api/populate/searchWiki";
 
 interface BookProps {}
 
@@ -20,6 +21,8 @@ export const showBookPageLoader: LoaderFunction = async ({ params }) => {
 
   const description = await SearchWiki(book.title);
   if (description) book.description = description;
+
+  console.log("yes");
 
   return book;
 };
@@ -38,12 +41,15 @@ const ShowBookPage: FunctionComponent<BookProps> = () => {
   return (
     <Container className="mb-5">
       <h1 className="text-center my-5">{currentBook?.title}</h1>
-      <BookData book={currentBook} />
+      <ShowBookPageHeader book={currentBook} />
+
       {/* <Spinner animation="border" role="status">
           <span className="visually-hidden">Loading...</span>
         </Spinner> */}
+
       <h1 className="text-center mt-5">De la acelasi autor:</h1>
       <h1 className="text-center mt-5">Comments Section</h1>
+
       <Box sx={{ flexGrow: 1, mt: 5 }}>
         <Grid container spacing={2}>
           <Grid xs={8} item>

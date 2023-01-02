@@ -1,6 +1,5 @@
-import { Chip, ChipProps, Typography, TypographyProps } from "@mui/material";
+import { TypographyProps, Typography } from "@mui/material";
 import { FunctionComponent, PropsWithChildren } from "react";
-import styled from "styled-components";
 
 //TODO add chip
 export const BookDataProp: FunctionComponent<
@@ -14,8 +13,4 @@ export const BookDataProp: FunctionComponent<
   >
     {children}
   </Typography>
-);
-
-export const BookDataChip: FunctionComponent<ChipProps> = ({ ...props }) => (
-  <Chip sx={{ ml: 1, fontSize: 20, fontWeight: 300 }} color="info" {...props} />
 );

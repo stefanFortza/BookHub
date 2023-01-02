@@ -2,14 +2,14 @@ import { Button } from "@mui/material";
 import { FunctionComponent, useEffect, useState } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { BookModel } from "../../../api/models/book.model";
-import { getUserData, getUserDocRef } from "../../../api/AuthAPI";
+import { BookModel } from "../../../../api/models/book.model";
+import { getUserData, getUserDocRef } from "../../../../api/AuthAPI";
 import {
   addBookToWishList,
   removeBookFromWishList,
-} from "../../../api/BookAPI";
-import { useUserContext } from "../../../utils/utils";
-import { UserModel } from "../../../api/models/user.model";
+} from "../../../../api/BookAPI";
+import { useUserContext } from "../../../../utils/utils";
+import { UserModel } from "../../../../api/models/user.model";
 
 interface AddToWishListProps {
   book: BookModel;

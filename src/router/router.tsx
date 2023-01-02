@@ -1,26 +1,26 @@
 import {
-  Route,
   createBrowserRouter,
   createRoutesFromElements,
+  Route,
 } from "react-router-dom";
+import SignInPage from "../components/authComponents/signInPage/signInPage";
+import SignUpPage from "../components/authComponents/signUpPage/signUpPage";
 import AddBookPage from "../pages/addBookPage/addBookPage";
 import AuthentificationPage, {
   authentificationPageLoader,
 } from "../pages/authentificationPage/authentificationPage";
+import BooksPage, { booksPageLoader } from "../pages/booksPage/booksPage";
+import CategoryBookPage from "../pages/categoryBookPage/categoryBookPage";
+import EditBookPage from "../pages/editBookPage/editBookPage";
+import HomePage from "../pages/homePage/homePage";
+import { PageNames } from "../pages/navigation/pagesNames";
 import ShowBookPage, {
   showBookPageLoader,
 } from "../pages/showBookPage/showBookPage";
-import EditBookPage from "../pages/editBookPage/editBookPage";
-import BooksPage, { booksPageLoader } from "../pages/booksPage/booksPage";
-import Navigation from "../pages/navigation/navigation";
-import { PageNames } from "../pages/navigation/pagesNames";
 import ProtectedRoute, {
   protectedRouteLoader,
 } from "../utils/components/protectedRoute";
-import SignInPage from "../components/authComponents/signInPage/signInPage";
-import SignUpPage from "../components/authComponents/signUpPage/signUpPage";
-import HomePage from "../pages/homePage/homePage";
-import CategoryBookPage from "../pages/categoryBookPage/categoryBookPage";
+import Navigation from "../pages/navigation/navigation";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
