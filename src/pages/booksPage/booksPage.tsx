@@ -2,14 +2,14 @@ import { FunctionComponent, Suspense } from "react";
 import BookList from "../../components/bookComponents/booklist/booklist.component";
 import { Await, LoaderFunction, defer, useLoaderData } from "react-router-dom";
 import { BookModel } from "../../api/models/book.model";
-import { getBooks } from "../../api/BookAPI";
 import SuspenseWrapper from "../../utils/components/suspenseWrapper";
 import { Box, Container, Grid, Skeleton } from "@mui/material";
+import { BookAPI } from "../../api/BookAPI";
 
 interface BooksPageProps {}
 
 export const booksPageLoader: LoaderFunction = async (args) => {
-  const booksPromise = getBooks(25);
+  const booksPromise = BookAPI.getBooks(25);
   return defer({ booksPromise });
 };
 

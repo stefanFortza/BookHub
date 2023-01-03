@@ -1,6 +1,5 @@
 import { FunctionComponent } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { signOutUser } from "../../api/AuthAPI";
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -15,10 +14,23 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AutoStoriesSharpIcon from "@mui/icons-material/AutoStoriesSharp";
-import { useUserContext } from "../../utils/utils";
+import { useCartContext, useUserContext } from "../../utils/utils";
 import { seedDB } from "../../api/populate/seedDB";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { styled } from "@mui/material/styles";
+import { Badge, BadgeProps } from "@mui/material";
+import { AuthAPI } from "../../api/AuthAPI";
 
 interface NavigationProps {}
+
+const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    right: -3,
+    top: 13,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: "0 4px",
+  },
+}));
 
 type NavElData = { name: string; link: string };
 const pages: NavElData[] = [
@@ -42,6 +54,7 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
   );
   const navigate = useNavigate();
   const { currentUser } = useUserContext();
+  const { cartQty } = useCartContext();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -59,7 +72,7 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
   };
 
   const signOut = async () => {
-    await signOutUser();
+    await AuthAPI.signOutUser();
     navigate(0);
   };
 
@@ -245,6 +258,19 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
                 </Button>
               </Box>
             )}
+            <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "flex" } }}>
+              <Button
+                onClick={(e) => {
+                  handleCloseNavMenu();
+                  navigate("/cart");
+                }}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                <StyledBadge badgeContent={cartQty} color="secondary">
+                  <ShoppingCartIcon />
+                </StyledBadge>
+              </Button>
+            </Box>
           </Toolbar>
         </Container>
       </AppBar>

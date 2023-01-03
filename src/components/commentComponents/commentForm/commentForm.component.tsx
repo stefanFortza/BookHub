@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { BookModel } from "../../../api/models/book.model";
 import "./commentForm.styles.css";
 import { useUserContext } from "../../../utils/utils";
-import { addComment } from "../../../api/CommentAPI";
 import {
   Box,
   Button,
@@ -16,6 +15,7 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { CommentAPI } from "../../../api/CommentAPI";
 
 interface CommentFormProps {
   book: BookModel;
@@ -47,7 +47,7 @@ const CommentForm: FunctionComponent<CommentFormProps> = ({ book }) => {
         return;
       }
 
-      const id = await addComment(
+      const id = await CommentAPI.addComment(
         {
           ...values,
         },

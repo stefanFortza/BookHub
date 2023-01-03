@@ -21,35 +21,38 @@ import ProtectedRoute, {
   protectedRouteLoader,
 } from "../utils/components/protectedRoute";
 import Navigation from "../pages/navigation/navigation";
+import CartPage, { cartPageLoader } from "../pages/cartPage/cartPage";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      <Route element={<ProtectedRoute />} loader={protectedRouteLoader}>
-        <Route path={PageNames.Root} element={<Navigation />}>
-          <Route index element={<HomePage />} />
+      {/* <Route element={<ProtectedRoute />} loader={protectedRouteLoader}> */}
+      <Route path={PageNames.Root} element={<Navigation />}>
+        <Route index element={<HomePage />} />
 
-          <Route path={PageNames.Books}>
-            <Route index element={<BooksPage />} loader={booksPageLoader} />
+        <Route path={PageNames.Books}>
+          <Route index element={<BooksPage />} loader={booksPageLoader} />
 
-            <Route path={PageNames.AddBook} element={<AddBookPage />} />
+          <Route path={PageNames.AddBook} element={<AddBookPage />} />
 
-            <Route path={PageNames.EditBook} element={<EditBookPage />} />
+          <Route path={PageNames.EditBook} element={<EditBookPage />} />
 
-            <Route
-              path={PageNames.ShowBook}
-              element={<ShowBookPage />}
-              loader={showBookPageLoader}
-            />
+          <Route
+            path={PageNames.ShowBook}
+            element={<ShowBookPage />}
+            loader={showBookPageLoader}
+          />
 
-            <Route
-              path={"category/:category"}
-              element={<CategoryBookPage />}
-              // loader={showBookPageLoader}
-            />
-          </Route>
+          <Route
+            path={"category/:category"}
+            element={<CategoryBookPage />}
+            // loader={showBookPageLoader}
+          />
         </Route>
+
+        <Route path="/cart" element={<CartPage />} loader={cartPageLoader} />
       </Route>
+      {/* </Route> */}
 
       <Route
         path={PageNames.Auth}

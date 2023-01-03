@@ -1,5 +1,5 @@
 import { collection, getCountFromServer, getDocs } from "firebase/firestore";
-import { addBook } from "../BookAPI";
+import { BookAPI } from "../BookAPI";
 import { BookModel, IBook } from "../models/book.model";
 import data from "./BX-MostPopular.json";
 import { db } from "../../utils/firebase";
@@ -15,7 +15,7 @@ export const seedDB = async () => {
       price: 1,
     };
     console.log(bookToAdd);
-    addBook(bookToAdd, auth.currentUser?.uid || "1");
+    BookAPI.addBook(bookToAdd, auth.currentUser?.uid || "1");
   }
 };
 

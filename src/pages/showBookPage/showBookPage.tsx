@@ -2,7 +2,7 @@ import { Paper, Box, Grid, styled, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 import { Container } from "react-bootstrap";
 import { LoaderFunction, useLoaderData } from "react-router-dom";
-import { getBook } from "../../api/BookAPI";
+import { BookAPI } from "../../api/BookAPI";
 import { BookModel } from "../../api/models/book.model";
 import SearchWiki from "../../api/populate/searchWiki";
 import ShowBookPageHeader from "../../components/bookComponents/bookPageData/showBookPageHeader.component";
@@ -16,7 +16,7 @@ export const showBookPageLoader: LoaderFunction = async ({ params }) => {
   if (!bookId) {
     throw new Response("Book Not Found");
   }
-  const book = await getBook(bookId);
+  const book = await BookAPI.getBook(bookId);
   if (!book) throw new Response("Book Not Found");
 
   const description = await SearchWiki(book.title);

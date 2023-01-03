@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 import { useNavigate } from "react-router-dom";
 import { BookModel } from "../../../api/models/book.model";
-import { useUserContext } from "../../../utils/utils";
+import { useCartContext, useUserContext } from "../../../utils/utils";
 import {
   Box,
   Card,
@@ -31,9 +31,8 @@ const Item = styled(Paper)(({ theme }) => ({
 const ShowBookPageHeader: FunctionComponent<BookPageDataProps> = ({ book }) => {
   const navigate = useNavigate();
   const { userData } = useUserContext();
+  const { addToCart } = useCartContext();
   const { price, id, imageURLL } = book;
-
-  console.log("yes");
 
   return (
     <Paper
@@ -78,7 +77,7 @@ const ShowBookPageHeader: FunctionComponent<BookPageDataProps> = ({ book }) => {
                         Price: {price + 0.99} lei
                       </Typography>
 
-                      <AddToCart />
+                      <AddToCart onClick={() => addToCart(book)} />
 
                       {userData ? (
                         <AddToWishList book={book} user={userData} />

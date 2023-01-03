@@ -3,13 +3,8 @@ import { FunctionComponent, useEffect, useState } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { BookModel } from "../../../../api/models/book.model";
-import { getUserData, getUserDocRef } from "../../../../api/AuthAPI";
-import {
-  addBookToWishList,
-  removeBookFromWishList,
-} from "../../../../api/BookAPI";
-import { useUserContext } from "../../../../utils/utils";
 import { UserModel } from "../../../../api/models/user.model";
+import { BookAPI } from "../../../../api/BookAPI";
 
 interface AddToWishListProps {
   book: BookModel;
@@ -30,12 +25,12 @@ const AddToWishList: FunctionComponent<AddToWishListProps> = ({
 
   const addToWishList = async () => {
     setIsAdded(!isAdded);
-    await addBookToWishList(book.id, user.id);
+    await BookAPI.addBookToWishList(book.id, user.id);
   };
 
   const removeFromWishList = async () => {
     setIsAdded(!isAdded);
-    await removeBookFromWishList(book.id, user.id);
+    await BookAPI.removeBookFromWishList(book.id, user.id);
   };
 
   if (isAdded)

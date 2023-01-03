@@ -8,29 +8,18 @@ import {
   Button,
   ButtonGroup,
 } from "@mui/material";
-import {
-  AuthErrorCodes,
-  FacebookAuthProvider,
-  GoogleAuthProvider,
-  fetchSignInMethodsForEmail,
-  linkWithCredential,
-  signInWithCredential,
-} from "firebase/auth";
+import { AuthErrorCodes } from "firebase/auth";
 import { useFormik } from "formik";
 import { FunctionComponent } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  signInUserWithEmailAndPassword,
-  signInWithFacebookPopUp,
-  signInWithGooglePopUp,
-} from "../../../api/AuthAPI";
+
 import * as yup from "yup";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { FirebaseError } from "firebase/app";
 import { ReactComponent as GoogleIcon } from "../../../assets/google.svg";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import { auth } from "../../../utils/firebase";
 import { signInWithFacebook } from "../../../utils/utils";
+import { AuthAPI } from "../../../api/AuthAPI";
 
 interface SignInPageProps {}
 
@@ -72,7 +61,10 @@ const SignInPage: FunctionComponent<SignInPageProps> = () => {
     onSubmit: async (values, { setSubmitting, submitForm, setFieldError }) => {
       try {
         console.log(values);
-        await signInUserWithEmailAndPassword(values.email, values.password);
+        await AuthAPI.signInUserWithEmailAndPassword(
+          values.email,
+          values.password
+        );
         navigate("/");
       } catch (e) {
         console.log(e);
@@ -87,7 +79,7 @@ const SignInPage: FunctionComponent<SignInPageProps> = () => {
   });
 
   const signInWithGoogle = async () => {
-    await signInWithGooglePopUp();
+    await AuthAPI.signInWithGooglePopUp();
     navigate("/");
   };
 

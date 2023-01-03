@@ -11,11 +11,7 @@ import {
 import { useFormik } from "formik";
 import { FunctionComponent } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  signInWithFacebookPopUp,
-  signInWithGooglePopUp,
-  signUpUserWithEmailAndPassword,
-} from "../../../api/AuthAPI";
+
 import * as yup from "yup";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { FirebaseError } from "firebase/app";
@@ -24,6 +20,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import { AuthErrorCodes } from "firebase/auth";
 import { auth } from "../../../utils/firebase";
 import { signInWithFacebook } from "../../../utils/utils";
+import { AuthAPI } from "../../../api/AuthAPI";
 
 interface SignInPageProps {}
 
@@ -69,7 +66,7 @@ const SignUpPage: FunctionComponent<SignInPageProps> = () => {
     onSubmit: async (values, { setSubmitting, setFieldError }) => {
       setSubmitting(true);
       try {
-        const user = await signUpUserWithEmailAndPassword(
+        const user = await AuthAPI.signUpUserWithEmailAndPassword(
           values.email,
           values.password,
           values.displayName
@@ -96,7 +93,7 @@ const SignUpPage: FunctionComponent<SignInPageProps> = () => {
   } = formik;
 
   const signInWithGoogle = async () => {
-    await signInWithGooglePopUp();
+    await AuthAPI.signInWithGooglePopUp();
     navigate("/");
   };
 

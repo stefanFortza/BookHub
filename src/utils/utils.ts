@@ -1,21 +1,20 @@
 import { useContext } from "react";
 import { UserContext } from "../contexts/user/user.context";
-import {
-  onAuthStateChangedListner,
-  signInWithFacebookPopUp,
-} from "../api/AuthAPI";
 import { AuthErrorCodes, User } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { NavigateFunction } from "react-router-dom";
+import { CartContext } from "../contexts/cart/cart.context";
+import { AuthAPI } from "../api/AuthAPI";
 
 type FieldErrorFunction = (field: string, value: string | undefined) => void;
 
 export const useUserContext = () => useContext(UserContext);
+export const useCartContext = () => useContext(CartContext);
 
 export const getUser = () => {
   return new Promise<User | null>((resolve, reject) => {
     // setTimeout(() => {
-    const unsubscribe = onAuthStateChangedListner((user) => {
+    const unsubscribe = AuthAPI.onAuthStateChangedListner((user) => {
       resolve(user);
     });
     unsubscribe();
@@ -28,7 +27,7 @@ export const signInWithFacebook = async (
   setFieldError: FieldErrorFunction
 ) => {
   try {
-    await signInWithFacebookPopUp();
+    await AuthAPI.signInWithFacebookPopUp();
     navigate("/");
   } catch (e) {
     const error = e as FirebaseError;
