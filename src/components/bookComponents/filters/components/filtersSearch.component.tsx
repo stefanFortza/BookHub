@@ -56,7 +56,6 @@ const FiltersSearch: FunctionComponent<FiltersSearchProps> = ({
     HTMLInputElement | HTMLTextAreaElement
   > = (e) => {
     setSearchField(e.currentTarget.value);
-    console.log(searchField);
   };
 
   return (

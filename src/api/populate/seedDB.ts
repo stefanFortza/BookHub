@@ -15,7 +15,7 @@ export const seedDB = async () => {
       price: 1,
     };
     console.log(bookToAdd);
-    BookAPI.addBook(bookToAdd, auth.currentUser?.uid || "1");
+    await BookAPI.addBook(bookToAdd, auth.currentUser?.uid || "1");
   }
 };
 

@@ -33,7 +33,7 @@ const Book: FunctionComponent<BookProps> = ({ book, ...other }) => {
           {title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {price.toFixed(2)} RON
+          {price ? price.toFixed(2) : "mama"} RON
         </Typography>
       </CardContent>
     </Card>

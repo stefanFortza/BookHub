@@ -14,11 +14,10 @@ import {
 } from "@mui/material";
 import FiltersSearch from "./components/filtersSearch.component";
 import fuzzysort from "fuzzysort";
+import { BookAPI } from "../../../api/BookAPI";
 
 interface FiltersProps {
-  setAuthorsChecked: React.Dispatch<React.SetStateAction<string[]>>;
-  authorsChecked: string[];
-  handleToggle: (value: string) => () => void;
+  handleCheckedAuthors: (authors: string[]) => void;
   books: BookModel[];
 }
 
@@ -31,37 +30,61 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Filters: FunctionComponent<FiltersProps> = ({
-  setAuthorsChecked,
-  handleToggle,
-  authorsChecked,
   books,
+  handleCheckedAuthors,
 }) => {
   const [uniqueAuthors, setUniqueAuthors] = useState<string[]>([]);
   const [filteredAuthors, setFilteredAuthors] = useState<string[]>([]);
+  const [authorsChecked, setAuthorsChecked] = useState<string[]>([]);
   const [searchField, setSearchField] = useState("");
 
+  //when the component updates it updates unique authors
   useEffect(() => {
-    const authors = books
-      .map((book) => book.author)
-      .filter((author, index, self) => self.indexOf(author) === index);
+    // const authors = books
+    //   .map((book) => book.author)
+    //   .filter((author, index, self) => self.indexOf(author) === index);
+    BookAPI.getAuthors().then((authorsData) => {
+      if (authorsData) {
+        const authors = authorsData.map((data) => data.author);
 
-    setUniqueAuthors(authors);
+        setUniqueAuthors(authors);
+      }
+    });
   }, [books]);
 
+  // when the search field changes it updates the filtered authors
   useEffect(() => {
+    let newFilteredAuthors: string[] = [];
+
     if (!searchField.length) {
-      setFilteredAuthors(uniqueAuthors);
+      newFilteredAuthors = [...uniqueAuthors];
     } else {
-      // const newFilteredAuthors = uniqueAuthors.filter((author) =>
-      //   author.toLowerCase().includes(searchField.toLowerCase())
-      // );
-      const newFilteredAuthors = fuzzysort
+      newFilteredAuthors = fuzzysort
         .go(searchField, uniqueAuthors)
         .map((res) => res.target);
-
-      setFilteredAuthors(newFilteredAuthors);
     }
+
+    setFilteredAuthors(newFilteredAuthors);
   }, [searchField, uniqueAuthors]);
+
+  // when authors checked change we pass data to parent
+  useEffect(() => {
+    handleCheckedAuthors(authorsChecked);
+  }, [authorsChecked]);
+
+  const handleToggle = (value: string) => () => {
+    const currentIndex = authorsChecked.indexOf(value);
+    const newChecked = [...authorsChecked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setAuthorsChecked(newChecked);
+    // console.log(authorsChecked);
+  };
 
   return (
     <Box>
@@ -76,6 +99,15 @@ const Filters: FunctionComponent<FiltersProps> = ({
           sx={{ width: "100%" }}
         >
           Reset Filters
+        </Button>
+      </Item>
+
+      <Item sx={{ mb: 3, backgroundColor: "#1A2027" }}>
+        <Button
+          // onClick={() => BookAPI.addAuthor("ddasasd")}
+          sx={{ width: "100%" }}
+        >
+          Authors
         </Button>
       </Item>
 
