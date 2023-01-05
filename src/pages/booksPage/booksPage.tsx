@@ -3,13 +3,13 @@ import BookList from "../../components/bookComponents/booklist/booklist.componen
 import { Await, LoaderFunction, defer, useLoaderData } from "react-router-dom";
 import { BookModel } from "../../api/models/book.model";
 import SuspenseWrapper from "../../utils/components/suspenseWrapper";
-import { Box, Container, Grid, Skeleton } from "@mui/material";
+import { Box, Container, Grid, Skeleton, Typography } from "@mui/material";
 import { BookAPI } from "../../api/BookAPI";
 
 interface BooksPageProps {}
 
 export const booksPageLoader: LoaderFunction = async (args) => {
-  const booksPromise = BookAPI.getBooks(25);
+  const booksPromise = BookAPI.getBooks(100);
   return defer({ booksPromise });
 };
 
@@ -26,6 +26,9 @@ const BooksPage: FunctionComponent<BooksPageProps> = () => {
       }
       children={(books) => (
         <Container>
+          <Typography variant="h2" sx={{ mt: 5 }}>
+            Browse books
+          </Typography>
           <Box mt={5}>
             <BookList books={books} />
           </Box>

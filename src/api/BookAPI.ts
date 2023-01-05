@@ -52,8 +52,8 @@ export namespace BookAPI {
 
   export async function getBooks(start: number) {
     const col = query(
-      collection(db, "books") as CollectionReference<BookModel>,
-      limit(start)
+      collection(db, "books") as CollectionReference<BookModel>
+      // limit(start)
     );
     const snapshot = await getDocs(col);
     const books: BookModel[] = [];

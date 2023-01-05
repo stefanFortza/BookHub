@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import Book from "../book/book.component";
 import Filters from "../filters/filters.component";
 import { BookModel } from "../../../api/models/book.model";
@@ -17,34 +17,59 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const BookList: FunctionComponent<BookListProps> = ({ books }) => {
-  const [filters, setFilters] = useState("all");
+  const [filteredBooks, setFilteredBooks] = useState<BookModel[]>([]);
+  const [authorsChecked, setAuthorsChecked] = useState<string[]>([]);
+
+  useEffect(() => {
+    const newFilteredBooks = books.filter((book) =>
+      authorsChecked.includes(book.author)
+    );
+    setFilteredBooks(newFilteredBooks);
+    console.log(filteredBooks);
+  }, [authorsChecked]);
+
+  const handleToggle = (value: string) => () => {
+    const currentIndex = authorsChecked.indexOf(value);
+    const newChecked = [...authorsChecked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setAuthorsChecked(newChecked);
+    // console.log(authorsChecked);
+  };
 
   return (
     <Grid container spacing={2}>
-      <Grid item sx={{ display: { xs: "none", md: "block" } }} md={2}>
-        <Item>
-          <Filters setFilters={setFilters} books={books} />
+      <Grid item sx={{ display: { xs: "none", md: "block" } }} md={3}>
+        <Item sx={{ mb: 3, backgroundColor: "#252e38" }}>
+          <Filters
+            authorsChecked={authorsChecked}
+            handleToggle={handleToggle}
+            setAuthorsChecked={setAuthorsChecked}
+            books={books}
+          />
         </Item>
       </Grid>
-      <Grid item xs={12} md={10} container spacing={4}>
-        {books.length ? (
-          books
-            .filter(
-              (book) =>
-                book.author.toLowerCase() === filters || filters === "all"
-            )
-            .map((book) => (
-              <Grid key={book.id} xs={12} md={6} lg={4} item>
+      <Grid item xs={12} md={9} container spacing={4}>
+        {filteredBooks.length
+          ? filteredBooks.map((book) => (
+              <Grid key={book.id} xs={6} md={4} lg={3} xl={2} item>
                 {/* <Item> */}
                 <Book book={book} />
                 {/* </Item> */}
               </Grid>
             ))
-        ) : (
-          <Grid xs={12} item>
-            "No books for this category"
-          </Grid>
-        )}
+          : books.map((book) => (
+              <Grid key={book.id} xs={6} md={4} lg={3} xl={2} item>
+                {/* <Item> */}
+                <Book book={book} />
+                {/* </Item> */}
+              </Grid>
+            ))}
       </Grid>
     </Grid>
   );
