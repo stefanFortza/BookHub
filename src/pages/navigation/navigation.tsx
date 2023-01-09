@@ -15,7 +15,6 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AutoStoriesSharpIcon from "@mui/icons-material/AutoStoriesSharp";
 import { useCartContext, useUserContext } from "../../utils/utils";
-import { seedDB } from "../../api/populate/seedDB";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { styled } from "@mui/material/styles";
 import { Badge, BadgeProps } from "@mui/material";
@@ -178,15 +177,6 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
                   {name}
                 </Button>
               ))}
-              <Button
-                onClick={(e) => {
-                  handleCloseNavMenu();
-                  seedDB();
-                }}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                SeedDB
-              </Button>
             </Box>
 
             {/* User Icon */}

@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useCallback, useEffect, useState } from "react";
 import { BookModel } from "../../../api/models/book.model";
 import {
   Box,
@@ -17,7 +17,9 @@ import fuzzysort from "fuzzysort";
 import { BookAPI } from "../../../api/BookAPI";
 
 interface FiltersProps {
-  handleCheckedAuthors: (authors: string[]) => void;
+  handleApplyFilters: (
+    checkedAuthors: { author: string; bookCount: number }[]
+  ) => void;
   books: BookModel[];
 }
 
@@ -31,49 +33,48 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const Filters: FunctionComponent<FiltersProps> = ({
   books,
-  handleCheckedAuthors,
+  handleApplyFilters,
 }) => {
-  const [uniqueAuthors, setUniqueAuthors] = useState<string[]>([]);
-  const [filteredAuthors, setFilteredAuthors] = useState<string[]>([]);
-  const [authorsChecked, setAuthorsChecked] = useState<string[]>([]);
+  const [uniqueAuthors, setUniqueAuthors] = useState<
+    { author: string; bookCount: number }[]
+  >([]);
+  const [authorsChecked, setAuthorsChecked] = useState<
+    { author: string; bookCount: number }[]
+  >([]);
+  const [filteredAuthors, setFilteredAuthors] = useState<
+    { author: string; bookCount: number }[]
+  >([]);
   const [searchField, setSearchField] = useState("");
 
   //when the component updates it updates unique authors
   useEffect(() => {
-    // const authors = books
-    //   .map((book) => book.author)
-    //   .filter((author, index, self) => self.indexOf(author) === index);
     BookAPI.getAuthors().then((authorsData) => {
       if (authorsData) {
-        const authors = authorsData.map((data) => data.author);
-
-        setUniqueAuthors(authors);
+        setUniqueAuthors(authorsData.authors);
       }
     });
   }, [books]);
 
   // when the search field changes it updates the filtered authors
   useEffect(() => {
-    let newFilteredAuthors: string[] = [];
+    let newFilteredAuthors: { author: string; bookCount: number }[] = [];
 
     if (!searchField.length) {
       newFilteredAuthors = [...uniqueAuthors];
     } else {
       newFilteredAuthors = fuzzysort
-        .go(searchField, uniqueAuthors)
-        .map((res) => res.target);
+        .go(searchField, uniqueAuthors, { key: "author" })
+        .map((res) => res.obj);
     }
+    // console.log(newFilteredAuthors);
 
-    setFilteredAuthors(newFilteredAuthors);
+    setFilteredAuthors(newFilteredAuthors.slice(0, 7));
   }, [searchField, uniqueAuthors]);
 
-  // when authors checked change we pass data to parent
-  useEffect(() => {
-    handleCheckedAuthors(authorsChecked);
-  }, [authorsChecked]);
-
-  const handleToggle = (value: string) => () => {
-    const currentIndex = authorsChecked.indexOf(value);
+  const handleToggle = (value: { author: string; bookCount: number }) => {
+    const currentIndex = authorsChecked.findIndex(
+      (authChek) => authChek.author === value.author
+    );
     const newChecked = [...authorsChecked];
 
     if (currentIndex === -1) {
@@ -83,7 +84,11 @@ const Filters: FunctionComponent<FiltersProps> = ({
     }
 
     setAuthorsChecked(newChecked);
-    // console.log(authorsChecked);
+    console.log(authorsChecked);
+  };
+
+  const handleApply = () => {
+    handleApplyFilters(authorsChecked);
   };
 
   return (
@@ -103,11 +108,8 @@ const Filters: FunctionComponent<FiltersProps> = ({
       </Item>
 
       <Item sx={{ mb: 3, backgroundColor: "#1A2027" }}>
-        <Button
-          // onClick={() => BookAPI.addAuthor("ddasasd")}
-          sx={{ width: "100%" }}
-        >
-          Authors
+        <Button onClick={handleApply} sx={{ width: "100%" }}>
+          Apply filters ({authorsChecked.length})
         </Button>
       </Item>
 
@@ -128,21 +130,28 @@ const Filters: FunctionComponent<FiltersProps> = ({
         }}
         subheader={<li />}
       >
-        {filteredAuthors.map((author, idx) => (
-          <ListItem
-            key={idx}
-            secondaryAction={
-              <Checkbox
-                edge="end"
-                onChange={handleToggle(author)}
-                checked={authorsChecked.indexOf(author) !== -1}
-                // inputProps={{ "aria-labelledby": labelId }}
+        {filteredAuthors.map((author, idx) => {
+          return (
+            <ListItem
+              key={idx}
+              secondaryAction={
+                <Checkbox
+                  edge="end"
+                  onClick={() => handleToggle(author)}
+                  checked={
+                    authorsChecked.findIndex(
+                      (x) => x.author === author.author
+                    ) !== -1
+                  }
+                />
+              }
+            >
+              <ListItemText
+                primary={`${author.author} (${author.bookCount})`}
               />
-            }
-          >
-            <ListItemText primary={author} />
-          </ListItem>
-        ))}
+            </ListItem>
+          );
+        })}
       </List>
     </Box>
   );

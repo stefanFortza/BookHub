@@ -4,7 +4,7 @@ import { Container } from "react-bootstrap";
 import { LoaderFunction, useLoaderData } from "react-router-dom";
 import { BookAPI } from "../../api/BookAPI";
 import { BookModel } from "../../api/models/book.model";
-import SearchWiki from "../../api/populate/searchWiki";
+import SearchWiki from "../../api/searchWiki";
 import ShowBookPageHeader from "../../components/bookComponents/bookPageData/showBookPageHeader.component";
 import CommentForm from "../../components/commentComponents/commentForm/commentForm.component";
 import CommentList from "../../components/commentComponents/commentList/commentList.component";

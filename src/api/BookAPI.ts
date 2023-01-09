@@ -20,54 +20,8 @@ import { uuidv4 } from "@firebase/util";
 import { AuthAPI } from "./AuthAPI";
 
 export namespace BookAPI {
-  interface AuthorsDataType {
-    uniqueAuthors: { author: string; books: number }[];
-  }
-
-  export async function addBook(book: IBook, userId: string) {
-    const id = uuidv4();
-
-    await addAuthor(book.author);
-
-    await setDoc<BookModel>(
-      doc(db, "books", id) as DocumentReference<BookModel>,
-      {
-        ...book,
-        id,
-        commentsRef: [],
-      }
-    );
-  }
-
-  export async function addAuthor(author: string) {
-    const authorsRef = doc(
-      db,
-      "books",
-      "authors"
-    ) as DocumentReference<AuthorsDataType>;
-    const authorsSnap = await getDoc<AuthorsDataType>(authorsRef);
-
-    if (authorsSnap.exists()) {
-      const { uniqueAuthors } = authorsSnap.data();
-      const indexAuthor = containsAuthor(uniqueAuthors, author);
-
-      if (indexAuthor === -1) {
-        await updateDoc(authorsRef, {
-          uniqueAuthors: arrayUnion({ author, books: 1 }),
-        });
-      } else {
-        await updateDoc(authorsRef, {
-          uniqueAuthors: arrayUnion({
-            author,
-            books: uniqueAuthors[indexAuthor].books + 1,
-          }),
-        });
-      }
-    } else {
-      await setDoc(authorsRef, {
-        uniqueAuthors: [{ author, books: 1 }],
-      });
-    }
+  export interface AuthorsType {
+    authors: { author: string; bookCount: number }[];
   }
 
   export async function getBook(id: string) {
@@ -93,9 +47,26 @@ export namespace BookAPI {
   export async function getBooks(start: number) {
     const col = query(
       collection(db, "books") as CollectionReference<BookModel>,
-      // limit(start)
-      where("__name__", "!=", "authors")
+      limit(start)
     );
+
+    const snapshot = await getDocs(col);
+    const books: BookModel[] = [];
+
+    snapshot.forEach((book) => {
+      books.push({ ...book.data() });
+    });
+    return books;
+  }
+
+  export async function getFilteredBooks(authors: string[]) {
+    if (!authors.length) return [];
+
+    const col = query(
+      collection(db, "books") as CollectionReference<BookModel>,
+      where("author", "in", authors)
+    );
+
     const snapshot = await getDocs(col);
     const books: BookModel[] = [];
     snapshot.forEach((book) => {
@@ -107,13 +78,13 @@ export namespace BookAPI {
   export async function getAuthors() {
     const authorsRef = doc(
       db,
-      "books",
+      "authors",
       "authors"
-    ) as DocumentReference<AuthorsDataType>;
+    ) as DocumentReference<AuthorsType>;
 
     const authorsSnapshot = await getDoc(authorsRef);
 
-    return authorsSnapshot.data()?.uniqueAuthors;
+    return authorsSnapshot.data();
   }
 
   export async function addBookToWishList(bookId: string, userId: string) {
@@ -150,20 +121,5 @@ export namespace BookAPI {
         }
       }
     }
-  }
-
-  function containsAuthor(
-    authorsData: AuthorsDataType["uniqueAuthors"],
-    author: string
-  ) {
-    for (let i = 0; i < authorsData.length; i++) {
-      const { author: dbAuthor } = authorsData[i];
-
-      if (dbAuthor.toLowerCase() === author.toLowerCase()) {
-        return i;
-      }
-    }
-
-    return -1;
   }
 }

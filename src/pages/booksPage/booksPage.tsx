@@ -9,7 +9,8 @@ import { BookAPI } from "../../api/BookAPI";
 interface BooksPageProps {}
 
 export const booksPageLoader: LoaderFunction = async (args) => {
-  const booksPromise = BookAPI.getBooks(100);
+  const booksPromise = BookAPI.getBooks(20);
+  console.log(booksPromise);
   return defer({ booksPromise });
 };
 
