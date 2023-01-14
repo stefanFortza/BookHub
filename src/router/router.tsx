@@ -9,7 +9,7 @@ import AddBookPage from "../pages/addBookPage/addBookPage";
 import AuthentificationPage, {
   authentificationPageLoader,
 } from "../pages/authentificationPage/authentificationPage";
-import BooksPage, { booksPageLoader } from "../pages/booksPage/booksPage";
+import BooksPage from "../pages/booksPage/booksPage";
 import CategoryBookPage from "../pages/categoryBookPage/categoryBookPage";
 import EditBookPage from "../pages/editBookPage/editBookPage";
 import HomePage from "../pages/homePage/homePage";
@@ -31,7 +31,7 @@ export const router = createBrowserRouter(
         <Route index element={<HomePage />} />
 
         <Route path={PageNames.Books}>
-          <Route index element={<BooksPage />} loader={booksPageLoader} />
+          <Route index element={<BooksPage />} />
 
           <Route path={PageNames.AddBook} element={<AddBookPage />} />
 

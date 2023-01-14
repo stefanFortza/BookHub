@@ -264,7 +264,9 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
           </Toolbar>
         </Container>
       </AppBar>
-      <Outlet />
+      <Box sx={{ mb: 10 }}>
+        <Outlet />
+      </Box>
     </>
   );
 };

@@ -13,6 +13,12 @@ import {
   arrayRemove,
   where,
   WriteBatch,
+  startAt,
+  orderBy,
+  startAfter,
+  QueryConstraint,
+  getCountFromServer,
+  QueryDocumentSnapshot,
 } from "firebase/firestore";
 import { BookModel, IBook } from "./models/book.model";
 import { db } from "../utils/firebase";
@@ -44,35 +50,45 @@ export namespace BookAPI {
     return books;
   }
 
-  export async function getBooks(start: number) {
-    const col = query(
-      collection(db, "books") as CollectionReference<BookModel>,
-      limit(start)
+  export async function getBooksPaginated(
+    page: number,
+    authors: string[] = [],
+    startAtBook?: QueryDocumentSnapshot<BookModel>
+  ): Promise<{
+    books: BookModel[];
+    count: number;
+    lastBook: QueryDocumentSnapshot<BookModel>;
+    firstBook: QueryDocumentSnapshot<BookModel>;
+  }> {
+    const booksCollection = collection(
+      db,
+      "books"
+    ) as CollectionReference<BookModel>;
+    const queryConstraints: QueryConstraint[] = [orderBy("id", "asc")];
+    if (authors.length) {
+      queryConstraints.push(where("author", "in", authors));
+    }
+    const snap = await getCountFromServer(
+      query(booksCollection, ...queryConstraints)
     );
+    const count = snap.data().count;
+    console.log(count);
+    queryConstraints.push(limit(8));
 
-    const snapshot = await getDocs(col);
+    if (startAtBook) {
+      queryConstraints.push(startAt(startAtBook));
+    }
+    const q = query(booksCollection, ...queryConstraints);
+
+    const snapshot = await getDocs(q);
     const books: BookModel[] = [];
+    const lastBook = snapshot.docs[snapshot.docs.length - 1];
+    const firstBook = snapshot.docs[0];
 
     snapshot.forEach((book) => {
       books.push({ ...book.data() });
     });
-    return books;
-  }
-
-  export async function getFilteredBooks(authors: string[]) {
-    if (!authors.length) return [];
-
-    const col = query(
-      collection(db, "books") as CollectionReference<BookModel>,
-      where("author", "in", authors)
-    );
-
-    const snapshot = await getDocs(col);
-    const books: BookModel[] = [];
-    snapshot.forEach((book) => {
-      books.push({ ...book.data() });
-    });
-    return books;
+    return { books, count, lastBook, firstBook };
   }
 
   export async function getAuthors() {
