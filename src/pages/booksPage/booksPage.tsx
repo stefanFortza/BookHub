@@ -36,6 +36,7 @@ const BooksPage: FunctionComponent<BooksPageProps> = () => {
     QueryDocumentSnapshot<BookModel>[]
   >([]);
   const [currentPage, setCurrentPage] = useState(0);
+  const [category, setCategory] = useState("");
   const location = useLocation();
 
   console.log(goBackStack);
@@ -43,11 +44,15 @@ const BooksPage: FunctionComponent<BooksPageProps> = () => {
   useEffect(() => {
     searchParams.set("page", currentPage.toString());
     setSearchParams(searchParams);
+    const newCategory = searchParams.get("category");
+    if (newCategory) {
+      setCategory(newCategory);
+    }
 
     async function getBooks() {
       const authors = searchParams.getAll("authors");
       const { books, count, firstBook, lastBook } =
-        await BookAPI.getBooksPaginated(currentPage, authors);
+        await BookAPI.getBooksPaginated(authors, category);
       setBooks(books);
       setCount(count);
       setLastVisible(lastBook);
@@ -58,7 +63,7 @@ const BooksPage: FunctionComponent<BooksPageProps> = () => {
   }, [location.search]);
 
   useEffect(() => {
-    setSearchParams({ authors: authorsChecked, page: "0" });
+    setSearchParams({ authors: authorsChecked, page: "0", category });
     setCurrentPage(0);
   }, [authorsChecked]);
 
@@ -70,8 +75,8 @@ const BooksPage: FunctionComponent<BooksPageProps> = () => {
     if (goBackStack.length) {
       const { books, count, firstBook, lastBook } =
         await BookAPI.getBooksPaginated(
-          currentPage,
           authors,
+          category,
           goBackStack[goBackStack.length - 2]
         );
       setBooks(books);
@@ -89,7 +94,7 @@ const BooksPage: FunctionComponent<BooksPageProps> = () => {
     const authors = searchParams.getAll("authors");
     if (lastVisible) {
       const { books, count, firstBook, lastBook } =
-        await BookAPI.getBooksPaginated(currentPage, authors, lastVisible);
+        await BookAPI.getBooksPaginated(authors, category, lastVisible);
       setGoBackStack([...goBackStack, firstBook]);
 
       setBooks(books);

@@ -1,6 +1,18 @@
-import { Box, Container, Grid, Paper, styled } from "@mui/material";
-import { FunctionComponent, HTMLProps } from "react";
+import {
+  Box,
+  Container,
+  Grid,
+  Link,
+  Paper,
+  Typography,
+  styled,
+} from "@mui/material";
+import { FunctionComponent, HTMLProps, useEffect, useState } from "react";
 import HomeImage from "../../components/homeImage/homeImage";
+import { useNavigate } from "react-router-dom";
+import { BookModel } from "../../api/models/book.model";
+import BookList from "../../components/bookComponents/booklist/booklist.component";
+import { BookAPI } from "../../api/BookAPI";
 
 interface HomePageProps {}
 
@@ -15,74 +27,47 @@ const Item = styled(Paper)(({ theme }) => ({
 //"https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
 
 const HomePage: FunctionComponent<HomePageProps> = () => {
+  const navigate = useNavigate();
+  const [books, setBooks] = useState<BookModel[]>([]);
+
+  useEffect(() => {
+    const getBooks = async () => {
+      const newBooksPromise: Promise<BookModel | undefined>[] = [];
+      for (let i = 0; i < 4; i++) {
+        const rand = Math.floor(Math.random() * 500);
+        const book = BookAPI.getBook(rand.toString());
+        newBooksPromise.push(book);
+      }
+      const newBooks = await Promise.all(newBooksPromise);
+      setBooks(newBooks as BookModel[]);
+    };
+    // BookAPI.getBook("24").then((book) => (book ? setBooks([book]) : null));
+    getBooks();
+  }, []);
+
   return (
     <Container>
-      <Grid container spacing={2} mt={5}>
-        <Grid item xs={12} md={6} lg={4}>
-          <Item>
-            <HomeImage
-              title="Fantasy"
-              to="/books/category/fantasy"
-              sx={{
-                height: "400px",
-                width: "100%",
-                borderRadius: "20px",
-                mt: "20px",
-                filter: "brightness(50%)",
-              }}
-              image="https://images.unsplash.com/photo-1535905557558-afc4877a26fc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80"
-            />
-          </Item>
+      <Typography
+        sx={{ textAlign: "center", my: 2 }}
+        component="h1"
+        variant="h2"
+      >
+        Home Page
+      </Typography>
+      <Box sx={{ mt: 3 }}>
+        <Link
+          sx={{ cursor: "pointer", fontSize: 35, color: "white" }}
+          onClick={() => navigate("/books")}
+          underline="none"
+        >
+          Discover Brand New Books
+        </Link>
+      </Box>
+      <Box sx={{ mt: 4 }}>
+        <Grid item xs={12} md={12} container spacing={4}>
+          <BookList books={books} />
         </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <Item>
-            <HomeImage
-              title="Classic"
-              to="/books/category/classic"
-              sx={{
-                height: "400px",
-                width: "100%",
-                borderRadius: "20px",
-                mt: "20px",
-                filter: "brightness(50%)",
-              }}
-              image="https://images.unsplash.com/photo-1509266272358-7701da638078?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1286&q=80"
-            />
-          </Item>
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <Item>
-            <HomeImage
-              title="Adventure"
-              to="/books/category/adventure"
-              sx={{
-                height: "400px",
-                width: "100%",
-                borderRadius: "20px",
-                mt: "20px",
-                filter: "brightness(50%)",
-              }}
-              image="https://images.unsplash.com/photo-1550399105-05c4a7641b02?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
-            />
-          </Item>
-        </Grid>
-        <Grid item xs={12}>
-          <Item>
-            <HomeImage
-              title="Fiction"
-              to="/books/category/fiction"
-              sx={{
-                height: "400px",
-                width: "100%",
-                borderRadius: "20px",
-                mt: "20px",
-                filter: "brightness(50%)",
-              }}
-              image="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-            />
-          </Item>
-        </Grid>
-      </Grid>
+      </Box>
     </Container>
   );
 };

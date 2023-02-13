@@ -51,8 +51,8 @@ export namespace BookAPI {
   }
 
   export async function getBooksPaginated(
-    page: number,
     authors: string[] = [],
+    category: string,
     startAtBook?: QueryDocumentSnapshot<BookModel>
   ): Promise<{
     books: BookModel[];
@@ -68,6 +68,10 @@ export namespace BookAPI {
     if (authors.length) {
       queryConstraints.push(where("author", "in", authors));
     }
+    if (category.length) {
+      queryConstraints.push(where("category", "==", category));
+    }
+
     const snap = await getCountFromServer(
       query(booksCollection, ...queryConstraints)
     );

@@ -13,7 +13,7 @@ const BookList: FunctionComponent<BookListProps> = ({ books }) => {
 
   return (
     <>
-      {books.length &&
+      {!!books.length &&
         books.map((book) => (
           <Grid key={book.id} xs={6} md={4} lg={3} xl={2} item>
             {/* <Item> */}

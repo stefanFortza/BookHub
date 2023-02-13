@@ -41,14 +41,8 @@ const ShowBookPage: FunctionComponent<BookProps> = () => {
   return (
     <Container className="mb-5">
       <h1 className="text-center my-5">{currentBook?.title}</h1>
+
       <ShowBookPageHeader book={currentBook} />
-
-      {/* <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner> */}
-
-      {/* <h1 className="text-center mt-5">De la acelasi autor:</h1> */}
-      {/* <h1 className="text-center mt-5">Comments Section</h1> */}
 
       <Box sx={{ flexGrow: 1, mt: 5 }}>
         <Grid container spacing={2}>

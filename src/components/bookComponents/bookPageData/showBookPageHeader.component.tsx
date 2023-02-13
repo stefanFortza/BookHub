@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BookModel } from "../../../api/models/book.model";
 import { useCartContext, useUserContext } from "../../../utils/utils";
@@ -77,7 +77,7 @@ const ShowBookPageHeader: FunctionComponent<BookPageDataProps> = ({ book }) => {
                         Price: {price + 0.99} lei
                       </Typography>
 
-                      <AddToCart onClick={() => addToCart(book)} />
+                      <AddToCart book={book} />
 
                       {userData ? (
                         <AddToWishList book={book} user={userData} />

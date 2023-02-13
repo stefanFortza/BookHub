@@ -15,6 +15,7 @@ export interface IBook {
   description: string;
   ratingCount: number;
   ratingAvg: number;
+  category: string;
 }
 export interface BookModel extends IBook {
   id: string;

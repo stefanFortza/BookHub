@@ -32,16 +32,11 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
 }));
 
 type NavElData = { name: string; link: string };
-const pages: NavElData[] = [
-  { name: "Books", link: "/books" },
-  { name: "AddBook", link: "/books/add" },
-  { name: "Home", link: "/" },
-];
+const pages: NavElData[] = [{ name: "Books", link: "/books" }];
 const settings: NavElData[] = [
   { name: "Profile", link: "/" },
   { name: "Account", link: "/" },
   { name: "Dashboard", link: "/" },
-  { name: "Add A book", link: "/books/add" },
 ];
 
 const Navigation: FunctionComponent<NavigationProps> = () => {

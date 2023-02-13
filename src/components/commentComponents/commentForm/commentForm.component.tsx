@@ -33,11 +33,9 @@ const validationSchema = yup.object({
   rating: yup.number().required("Rating in required"),
 });
 
-//TODO Add formik
 const CommentForm: FunctionComponent<CommentFormProps> = ({ book }) => {
   const { currentUser } = useUserContext();
   const navigate = useNavigate();
-
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
