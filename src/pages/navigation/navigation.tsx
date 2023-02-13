@@ -17,8 +17,16 @@ import AutoStoriesSharpIcon from "@mui/icons-material/AutoStoriesSharp";
 import { useCartContext, useUserContext } from "../../utils/utils";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { styled } from "@mui/material/styles";
-import { Badge, BadgeProps } from "@mui/material";
+import {
+  Badge,
+  BadgeProps,
+  BottomNavigation,
+  BottomNavigationAction,
+} from "@mui/material";
 import { AuthAPI } from "../../api/AuthAPI";
+import RestoreIcon from "@mui/icons-material/Restore";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 interface NavigationProps {}
 
@@ -46,6 +54,7 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+  const [value, setValue] = React.useState(0);
   const navigate = useNavigate();
   const { currentUser } = useUserContext();
   const { cartQty } = useCartContext();
@@ -267,6 +276,14 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
       </AppBar>
       <Box sx={{ mb: 10 }}>
         <Outlet />
+      </Box>
+
+      <Box sx={{ width: "100%", mb: 2 }}>
+        <footer>
+          <Typography sx={{ textAlign: "center" }}>
+            Copyright © {new Date().getFullYear()} Stefan
+          </Typography>
+        </footer>
       </Box>
     </>
   );
