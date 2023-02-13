@@ -177,8 +177,14 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
             {/* User Icon */}
             {currentUser ? (
               <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "flex" } }}>
-                <Tooltip title="Open settings">
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Tooltip
+                  // title="Open settings"
+                  title=""
+                >
+                  <IconButton
+                    //  onClick={handleOpenUserMenu}
+                    sx={{ p: 0 }}
+                  >
                     <Avatar
                       alt="Remy Sharp"
                       src={currentUser?.photoURL || ""}
@@ -188,7 +194,7 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
                 <Button
                   onClick={(e) => {
                     handleCloseNavMenu();
-                    navigate("/auth");
+                    // navigate("/auth");
                   }}
                   sx={{ my: 2, color: "white", display: "block" }}
                 >

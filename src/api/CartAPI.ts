@@ -28,8 +28,9 @@ export namespace CartAPI {
     if (cartItems) {
       const index = cartItems.findIndex((item) => item.id === cartItem.id);
       if (index !== -1) {
-        cartItems = cartItems.splice(index, 1);
+        cartItems.splice(index, 1);
       }
+      console.log(cartItems);
 
       return await setCartItems(cartItems);
     }

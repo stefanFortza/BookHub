@@ -9,8 +9,7 @@ interface CartItemProps {
 }
 
 const CartItem: FunctionComponent<CartItemProps> = ({ cartItem }) => {
-  const { addToCart, removeFromCart, decreaseQty, increaseQty } =
-    useCartContext();
+  const { removeFromCart, decreaseQty, increaseQty } = useCartContext();
 
   return (
     <Paper sx={{ mb: 4, p: 3, width: "80%" }}>
