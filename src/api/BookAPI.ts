@@ -19,6 +19,7 @@ import {
   QueryConstraint,
   getCountFromServer,
   QueryDocumentSnapshot,
+  DocumentSnapshot,
 } from "firebase/firestore";
 import { BookModel, IBook } from "./models/book.model";
 import { db } from "../utils/firebase";
@@ -141,5 +142,24 @@ export namespace BookAPI {
         }
       }
     }
+  }
+
+  export async function getBooksFromReference(
+    wishListRef: DocumentReference<BookModel>[]
+  ) {
+    const books: BookModel[] = [];
+    const booksPromise: Promise<DocumentSnapshot<BookModel>>[] = [];
+    for (let i = 0; i < wishListRef.length; i++) {
+      const ref = wishListRef[i];
+      const bookPromise = getDoc(ref);
+      booksPromise.push(bookPromise);
+    }
+    const snapshots = await Promise.all(booksPromise);
+    snapshots.forEach((book) => {
+      if (book.exists()) {
+        books.push(book.data());
+      }
+    });
+    return books;
   }
 }

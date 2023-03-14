@@ -16,6 +16,7 @@ import ShowBookPage, {
 } from "../pages/showBookPage/showBookPage";
 import Navigation from "../pages/navigation/navigation";
 import CartPage, { cartPageLoader } from "../pages/cartPage/cartPage";
+import WishListPage from "../pages/wishListPage/wishListPage";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -35,6 +36,8 @@ export const router = createBrowserRouter(
         </Route>
 
         <Route path="/cart" element={<CartPage />} loader={cartPageLoader} />
+
+        <Route path="/wishlist" element={<WishListPage />} />
       </Route>
       {/* </Route> */}
 

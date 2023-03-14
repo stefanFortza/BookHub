@@ -42,9 +42,10 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
 type NavElData = { name: string; link: string };
 const pages: NavElData[] = [{ name: "Books", link: "/books" }];
 const settings: NavElData[] = [
-  { name: "Profile", link: "/" },
-  { name: "Account", link: "/" },
-  { name: "Dashboard", link: "/" },
+  { name: "WishList", link: "/wishlist" },
+  // { name: "Profile", link: "/" },
+  // { name: "Account", link: "/" },
+  // { name: "Dashboard", link: "/" },
 ];
 
 const Navigation: FunctionComponent<NavigationProps> = () => {
@@ -190,10 +191,7 @@ const Navigation: FunctionComponent<NavigationProps> = () => {
                   // title="Open settings"
                   title=""
                 >
-                  <IconButton
-                    //  onClick={handleOpenUserMenu}
-                    sx={{ p: 0 }}
-                  >
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
                       alt="Remy Sharp"
                       src={currentUser?.photoURL || ""}

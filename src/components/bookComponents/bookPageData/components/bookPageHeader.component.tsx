@@ -1,6 +1,48 @@
 import { Box, Typography, Chip, Rating } from "@mui/material";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useRef } from "react";
 import { BookModel } from "../../../../api/models/book.model";
+import {
+  EmailIcon,
+  FacebookIcon,
+  FacebookMessengerIcon,
+  HatenaIcon,
+  InstapaperIcon,
+  LineIcon,
+  LinkedinIcon,
+  LivejournalIcon,
+  MailruIcon,
+  OKIcon,
+  PinterestIcon,
+  PocketIcon,
+  RedditIcon,
+  TelegramIcon,
+  TumblrIcon,
+  TwitterIcon,
+  ViberIcon,
+  VKIcon,
+  WeiboIcon,
+  WhatsappIcon,
+  WorkplaceIcon,
+  EmailShareButton,
+  FacebookShareButton,
+  HatenaShareButton,
+  InstapaperShareButton,
+  LineShareButton,
+  LinkedinShareButton,
+  LivejournalShareButton,
+  MailruShareButton,
+  OKShareButton,
+  PinterestShareButton,
+  PocketShareButton,
+  RedditShareButton,
+  TelegramShareButton,
+  TumblrShareButton,
+  TwitterShareButton,
+  ViberShareButton,
+  VKShareButton,
+  WhatsappShareButton,
+  WorkplaceShareButton,
+} from "react-share";
 
 interface BookPageHeaderProps {
   book: BookModel;
@@ -8,7 +50,9 @@ interface BookPageHeaderProps {
 
 const BookPageHeader: FunctionComponent<BookPageHeaderProps> = ({ book }) => {
   const { title, author, ratingAvg, ratingCount } = book;
-
+  // const url = `${location.protocol}//${location.hostname}/books/show/${book.id}`;
+  const url = location.href;
+  console.log(url);
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
       <Typography
@@ -43,6 +87,26 @@ const BookPageHeader: FunctionComponent<BookPageHeaderProps> = ({ book }) => {
           max={10}
           readOnly
         />
+      </Box>
+      <Box sx={{ alignSelf: "flex-start", textAlign: "left" }}>
+        <EmailShareButton url={url}>
+          <EmailIcon />
+        </EmailShareButton>
+        <FacebookShareButton url={url}>
+          <FacebookIcon />
+        </FacebookShareButton>
+        <PinterestShareButton url={url} media={book.imageURLL}>
+          <PinterestIcon />
+        </PinterestShareButton>
+        <RedditShareButton url={url}>
+          <RedditIcon />
+        </RedditShareButton>
+        <TwitterShareButton url={url}>
+          <TwitterIcon />
+        </TwitterShareButton>
+        <WhatsappShareButton url={url}>
+          <WhatsappIcon />
+        </WhatsappShareButton>
       </Box>
     </Box>
   );
