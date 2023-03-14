@@ -79,7 +79,7 @@ export default function WishListBook({ book, user }: WishListBookProps) {
         <FacebookShareButton
           url={`https://books-app-v2.web.app/books/show/${book.id}`}
         >
-          <FacebookIcon sty />
+          <FacebookIcon />
         </FacebookShareButton>
       </CardActions>
     </Card>
