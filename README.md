@@ -4,7 +4,6 @@
 
 BookHub is an e-commerce application where users can browse, search, and purchase books. The application leverages a variety of modern web technologies and uses data sourced from the [Book-Crossing dataset](https://www.kaggle.com/datasets/ruchi798/bookcrossing-dataset).
 
-![Home Page](screenshots/home.png)
 ![Browse Page](screenshots/browse.png)
 ![Book Details](screenshots/details.png)
 ![Authentication](screenshots/signin.png)
