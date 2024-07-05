@@ -1,16 +1,39 @@
-# books-app-v2(<https://books-app-v2.web.app>)
+# BookHub
 
-## The data used comes from <https://www.kaggle.com/datasets/ruchi798/bookcrossing-dataset>
+## Description
 
-## This is an ecommerce personal project which uses the following technologies
+BookHub is an e-commerce application where users can browse, search, and purchase books. The application leverages a variety of modern web technologies and uses data sourced from the [Book-Crossing dataset](https://www.kaggle.com/datasets/ruchi798/bookcrossing-dataset).
 
--React (with Vite and Material-UI)
--Firebase (Authentification and Firestore Database)
+![Home Page](screenshots/home.png)
+![Browse Page](screenshots/browse.png)
+![Book Details](screenshots/details.png)
+![Authentication](screenshots/signin.png)
 
-## And a couple of libraries
+## Table of Contents
 
--Formik
--Yup
--Axios
--LocalForage
--Fuzzysort
+- [Features](#features)
+- [Technologies](#technologies)
+- [Libraries](#libraries)
+
+## Features
+
+- User authentication
+- Browse books
+- Add books to cart and purchase
+- Responsive design
+- Data persistence with Firestore
+- Filters For Books
+- Commnets \ Reviews
+
+## Technologies
+
+- React (with Vite and Material-UI)
+- Firebase (Authentication and Firestore Database)
+
+## Libraries
+
+- Formik
+- Yup
+- Axios
+- LocalForage
+- Fuzzysort
